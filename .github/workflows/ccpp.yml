@@ -1,0 +1,17 @@
+name: C/C++ CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install libraries
+      run: apt install -y libserialport libserialport-dev
+    - name: make
+      run: make
+    - name: file
+      run: file ./pikon

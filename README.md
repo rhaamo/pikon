@@ -1,5 +1,7 @@
 # PIKON
 
+Work in progress, untested for now...
+
 # Dependencies
 - https://sigrok.org/api/libserialport/unstable/index.html
 

@@ -9,6 +9,8 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
+    - name: Update apt
+      run: sudo apt update
     - name: Install libraries
       run: sudo apt install -y libserialport libserialport-dev
     - name: make

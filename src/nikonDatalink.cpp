@@ -119,10 +119,25 @@ ERROR:
     return err;
 }
 
+/**
+ * @brief Get detected Camera Type
+ * 
+ * @return CameraType 
+ */
 CameraType NikonDatalink::getCameraType () {
-    return cameraType;
+    if (cameraType) {
+        return cameraType;
+    }
+    return CameraType::unknown;
 }
 
+/**
+ * @brief Write buffer to serial port with a slight delay
+ * 
+ * @param buf Buffer content
+ * @param size Size of buffer
+ * @return int 
+ */
 int NikonDatalink::writeDataSlow (const void *buf, int size) {
     unsigned int i;
     char *p;
@@ -143,6 +158,13 @@ int NikonDatalink::writeDataSlow (const void *buf, int size) {
     return SP_OK;
 }
 
+/**
+ * @brief Read datas from serial port
+ * 
+ * @param buf Buffer content
+ * @param size Size of buffer
+ * @return int 
+ */
 int NikonDatalink::readData (void *buf, int size) {
     unsigned long byteCount = 0;
     int err;

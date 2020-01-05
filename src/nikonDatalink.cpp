@@ -105,9 +105,9 @@ RETRY_QUERY:
     if (strlen((char *) &(serialBuffer[4])) < kCameraNameBufSize) {
         strcpy(cameraName, (char *) &(serialBuffer[4]));
         if (memcmp(serialBuffer, kN90sResponseString, sizeof(kN90sResponseString)) == 0) {
-            cameraType = cameraN90s;
+            cameraType = CameraType::cameraN90s;
         } else if (memcmp(serialBuffer, kN90ResponseString, sizeof(kN90ResponseString)) == 0) {
-			cameraType = cameraN90;
+			cameraType = CameraType::cameraN90;
         } else {
 			err = kWrongCameraErr;
         }

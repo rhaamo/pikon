@@ -29,7 +29,7 @@ class NikonDatalink {
 
         struct sp_port *serialPort;
         char cameraName[kCameraNameBufSize];
-        CameraType cameraType;
+        CameraType cameraType = CameraType::unknown;
         unsigned char serialBuffer[kSerialBufSize];
 };
 

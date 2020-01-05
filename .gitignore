@@ -1,0 +1,4 @@
+# Compilation stuff
+/pikon
+*.o
+*.d

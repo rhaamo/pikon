@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "libserialport.h": "c",
+        "nikondatalink.h": "c"
+    },
+    "files.exclude": {
+        "**/*.d": true,
+        "**/*.o": true
+    }
+}

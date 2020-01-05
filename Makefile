@@ -13,7 +13,7 @@ INC_FLAGS := $(addprefix -I,$(INCDIRS))
 FLAGS_LIBSERIALPORT = $(shell pkg-config --cflags libserialport)
 LIBS_LIBSERIALPORT = $(shell pkg-config --libs libserialport)
 
-CPPFLAGS ?= $(INC_FLAGS) -MMD -MP $(FLAGS_LIBSERIALPORT)
+CPPFLAGS ?= $(INC_FLAGS) -MMD -MP -std=c++11 $(FLAGS_LIBSERIALPORT)
 
 $(TARGET): $(OBJS)
 	$(CC) $(LDFLAGS) $(OBJS) -o $@ $(LOADLIBES) $(LDLIBS) $(LIBS_LIBSERIALPORT)

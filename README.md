@@ -7,6 +7,7 @@ Work in progress, untested for now...
 
 # TODO
 - Unfuck things
+- Implement session error ?
 
 # Copything
 Based on `N90 Buddy for Palm`.

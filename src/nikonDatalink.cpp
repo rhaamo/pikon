@@ -394,6 +394,7 @@ COMMAND_RETRY:
             goto ERROR;
         }
         usleep(200);
+        log_info("Serial port is now configured for 9600bps");
     }
 
 ERROR:

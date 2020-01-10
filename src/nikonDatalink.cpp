@@ -388,14 +388,24 @@ COMMAND_RETRY:
     }
 
     if (mode == kBaudChangeMode) {
-        // switch to 9600, set new serialBaudrate
-        // sleep 200
+        int baudErr = sp_set_baudrate(serialPort, 9600);
+        if (baudErr != SP_OK) {
+            log_fatal("Error setting baudrate to 9600: %s", sp_last_error_message());
+            goto ERROR;
+        }
+        usleep(200);
     }
 
 ERROR:
     return err;
 }
 
+/**
+ * @brief Create a data packet
+ * 
+ * @param buf 
+ * @param size 
+ */
 void NikonDatalink::makeDataPacket(unsigned char *buf, int size) {
     unsigned char *p;
     unsigned char cs;
@@ -422,7 +432,13 @@ void NikonDatalink::makeDataPacket(unsigned char *buf, int size) {
     memmove(p, &dstop, kDataPacketStopSize);
 }
 
-
+/**
+ * @brief Read a data packet
+ * 
+ * @param buf 
+ * @param size 
+ * @return int 
+ */
 int NikonDatalink::readDataPacket(unsigned char *buf, int size) {
     int err;
     unsigned char *p;
@@ -460,6 +476,11 @@ ERROR:
     return err;
 }
 
+/**
+ * @brief Read a status packet
+ * 
+ * @return int 
+ */
 int NikonDatalink::readStatusPacket() {
     StatusPacket ep;
     int err;

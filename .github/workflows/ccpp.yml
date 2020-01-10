@@ -9,10 +9,10 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    - name: Checkout submodules
-      uses: textbook/git-checkout-submodule-action@2.0.0
     - name: Install libraries
-      run: sudo apt install -y libserialport0 libserialport-dev
+      run: sudo apt install -y libserialport0 libserialport-dev git
+    - name: Checkout submodules
+      run: git submodule init && git submodule update
     - name: make
       run: make
     - name: file

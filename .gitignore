@@ -1,4 +1,4 @@
 # Compilation stuff
 /pikon
-*.o
-*.d
+**/*.o
+**/*.d

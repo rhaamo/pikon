@@ -9,9 +9,8 @@
  * @param serialPort eg. /dev/ttyUSB0, COM2,...
  * @param baudrate  1200bps by default
  */
-NikonDatalink::NikonDatalink (const char *serialPort, int baudrate) {
+NikonDatalink::NikonDatalink (const char *serialPort) {
     serialPortName = serialPort;
-    serialPortBaudrate = baudrate;
 }
 
 /**
@@ -234,5 +233,246 @@ int NikonDatalink::readData (void *buf, int size) {
 
     log_debug("readData: '%s', read: %i, err: %i", buf, readCount, err);
 
+    return err;
+}
+
+/**
+ * @brief Switch to 9600 bps after camera identification has been done
+ * 
+ */
+bool NikonDatalink::switchBaudrate() {
+    if (!baudrateChange || cameraType == CameraType::unknown) {
+        log_error("baudrateChange not enabled or camera type unknown. cannot switch baudrate");
+        return false;
+    }
+    log_info("Switching baudrate...");
+    if (sendCommand(kBaudChangeMode, 0, 0, 0)) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * @brief Send a command
+ * 
+ * @param mode 
+ * @param address 
+ * @param buff 
+ * @param size 
+ * @return int 0 if ok; <0 if err
+ */
+int NikonDatalink::sendCommand(int mode, unsigned long address, void *buf, int size) {
+    log_debug("Sending command, mode: %i, address: %u, buffer: %s, size: %i", mode, address, buf, size);
+
+    int partial;
+    int err = 0;
+
+    do {
+        partial = size;
+        if (size > kMaxCommandData) {
+            partial = kMaxCommandData;
+        }
+
+        err = sendCommandLoop(mode, address, buf, partial);
+        if (err) {
+            goto ERROR;
+        }
+
+        size -= partial;
+        // (unsigned char *) buf += partial;
+        // https://clang.llvm.org/compatibility.html#lvalue-cast
+        #warning "pls unbork"
+        address += partial;
+    } while (size > 0);
+
+ERROR:
+    return 0;
+}
+
+/**
+ * @brief Send the command in loop or whatever
+ * 
+ * @param mode 
+ * @param address 
+ * @param buf 
+ * @param size 
+ * @return int 0 = ok, <0 = lol rip
+ */
+int NikonDatalink::sendCommandLoop(int mode, unsigned long address, void *buf, int size) {
+    log_debug("Sending command loop, mode: %i, address: %u, buffer: %s, size: %i", mode, address, buf, size);
+
+    CommandPacket cp;
+    char retry;
+    bool slow = false;
+    int err = 0;
+    unsigned char *cmdBuf;
+
+    cmdBuf = (unsigned char *)buf;
+
+    retry = false;
+
+    cp.startMark = kCommandStartMark;
+    if (cameraType == cameraN90s) {
+        cp.commandFlag = kCommandN90SCommandFlag;
+    } else {
+        cp.commandFlag = kCommandN90CommandFlag;
+    }
+    cp.modeFlag = mode;
+    cp.stopMark = kCommandStopMark;
+    cp.length = 0;
+    SET_ADDRESS(&cp.address, address);
+
+COMMAND_RETRY:
+    switch (mode) {
+        case kReadDataMode:
+            SET_ADDRESS(&cp.address, address);
+            cp.length = size;
+            err = writeData(&cp, kCommandPacketSize);
+            break;
+        case kWriteDataMode:
+            SET_ADDRESS(&cp.address, address);
+            cp.length = size;
+            makeDataPacket(cmdBuf, size);
+            err = writeData(&cp, kCommandPacketSize - 1); // leave off stop bit
+            err = writeData(serialBuffer, kDataPacketStartSize + size + kDataPacketStopSize);
+            break;
+        case kShutterMode:
+        case kFocusMode:
+            err = writeData(&cp, kCommandPacketSize);
+            break;
+        case kBaudChangeMode:
+            SET_ADDRESS(&cp.address, kBaud9600Address);
+            err = writeDataSlow(&cp, kCommandPacketSize);
+            break;
+        case kMemoHolderMode:
+            SET_ADDRESS(&cp.address, kMemoHolderAddress);
+            err = writeData(&cp, kCommandPacketSize);
+            break;
+        default:
+            err = kUnknownModeErr;
+            break;
+    }
+
+    if (err) {
+        goto ERROR;
+    }
+
+    switch (mode) {
+        case kReadDataMode:
+            err = readDataPacket(cmdBuf, size);
+            break;
+        case kWriteDataMode:
+        case kBaudChangeMode:
+            err = readStatusPacket();
+            break;
+        case kShutterMode:
+        case kFocusMode:
+            // ???
+            break;
+        case kMemoHolderMode:
+            err = readDataPacket(cmdBuf, kMemoHolderResponseSize);
+            break;
+        default:
+            err = kUnknownModeErr;
+            break;
+    }
+
+    if (err && (retry == false)) {
+        retry = true;
+        goto COMMAND_RETRY;
+    }
+
+    if (err) {
+        goto ERROR;
+    }
+
+    if (mode == kBaudChangeMode) {
+        // switch to 9600, set new serialBaudrate
+        // sleep 200
+    }
+
+ERROR:
+    return err;
+}
+
+void NikonDatalink::makeDataPacket(unsigned char *buf, int size) {
+    unsigned char *p;
+    unsigned char cs;
+    unsigned int count;
+    DataPacketStart dstart;
+    DataPacketStop dstop;
+
+    count = size;
+    p = (unsigned char *)buf;
+    cs = 0;
+    while (count--) {
+        cs += *p++;
+    }
+
+    dstart.startMark = kDataPacketStartMark;
+    dstop.checkByte = cs;
+    dstop.stopMark = kDataPacketStopMark;
+
+    p = (unsigned char *)serialBuffer;
+    memmove(p, &dstart, kDataPacketStartSize);
+    p += kDataPacketStartSize;
+    memmove(p, buf, size);
+    p+= size;
+    memmove(p, &dstop, kDataPacketStopSize);
+}
+
+
+int NikonDatalink::readDataPacket(unsigned char *buf, int size) {
+    int err;
+    unsigned char *p;
+    unsigned char cs;
+    int count;
+
+    err = readData(serialBuffer, size + kDataPacketStartSize + kDataPacketStopSize);
+    if (err) {
+        goto ERROR;
+    }
+
+    p = serialBuffer;
+    if (((DataPacketStart *) p)->startMark != kDataPacketStartMark) {
+        goto ERROR;
+    }
+    p += kDataPacketStartSize;
+    cs = 0;
+    count = size;
+    while (count--) {
+        cs += *p;
+        *buf++ = *p++;
+    }
+    if (((DataPacketStop *) p)->checkByte != cs) {
+        err = kPacketCSErr;
+    } else if (((DataPacketStop *) p)->stopMark != kDataPacketStopMark) {
+        err = kPacketSizeErr;
+    }
+
+    if (err) {
+        goto ERROR;
+    }
+
+    return err;
+ERROR:
+    return err;
+}
+
+int NikonDatalink::readStatusPacket() {
+    StatusPacket ep;
+    int err;
+
+    err = readData(&ep, kStatusPacketSize);
+    if (err) {
+        goto ERROR;
+    }
+
+    if (ep.status != kStatusOK) {
+        err = kPacketResponseErr;
+    }
+
+ERROR:
     return err;
 }

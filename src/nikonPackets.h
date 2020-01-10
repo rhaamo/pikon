@@ -129,3 +129,9 @@ typedef struct {
 	unsigned int	signoffWord;
 } SignoffPacket;
 #define kSignoffPacketSize	2
+
+typedef struct {
+        unsigned int    rollNumber;
+        unsigned int    byteCount;
+} MemoHolderResponse;
+#define kMemoHolderResponseSize 4

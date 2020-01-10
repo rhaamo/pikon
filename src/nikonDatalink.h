@@ -12,29 +12,47 @@
 #define kCameraNameBufSize	16
 #define kSerialTimeout 2000
 
+#define kMaxCommandData       0xEE
+
+#define SET_ADDRESS(d,s)        \
+        { \
+                unsigned char *dp; \
+                dp = (unsigned char *)d;        \
+                *dp++ = (unsigned char) (s>>16);        \
+                *dp++ = (unsigned char) (s>>8); \
+                *dp++ = (unsigned char) s;      \
+        }
+
 class NikonDatalink {
     public:
-        NikonDatalink(const char *serialPort, int baudrate);
+        NikonDatalink(const char *serialPort);
         ~NikonDatalink();
         int serialOpen();
         int identifyCamera();
         CameraType getCameraType();
         void setLogLevel(int);
+        bool switchBaudrate();
 
         const char *serialPortName;
-        int serialPortBaudrate;
 
     private:
         int serialClose();
         int writeDataSlow(const void *buf, int size);
         int writeData (const void *buf, int size);
         int readData(void *buf, int size);
+        int sendCommand(int mode, unsigned long address, void *buf, int size);
+        int sendCommandLoop(int mode, unsigned long address, void *buf, int size);
+        void makeDataPacket(unsigned char *buf, int size);
+        int readDataPacket(unsigned char *buf, int size);
+        int readStatusPacket();
 
         struct sp_port *serialPort;
         char cameraName[kCameraNameBufSize];
         CameraType cameraType = CameraType::unknown;
         unsigned char serialBuffer[kSerialBufSize];
         int logLevel = LOG_ERROR;
+        int serialPortBaudrate = 1200;
+        bool baudrateChange = true;
 };
 
 #endif

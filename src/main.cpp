@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
         break;
     }
 
-    NikonDatalink dl(getoptPort, 1200);
+    NikonDatalink dl(getoptPort);
 
     dl.setLogLevel(LOG_DEBUG);
 
@@ -48,6 +48,10 @@ int main(int argc, char **argv) {
         printf("Camera is unknown\n");
     }
 
-    // do stuff
+    if (dl.switchBaudrate()) {
+        printf("Switched baudrate to 9600bps\n");
+    } else {
+        printf("Baudrate switch failed\n");
+    }
     return 0;
 }

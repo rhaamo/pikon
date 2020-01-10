@@ -28,30 +28,8 @@ int main(int argc, char **argv) {
 
     dl.setLogLevel(LOG_DEBUG);
 
-    int err = dl.serialOpen();
-    if (err) {
-        printf("Error opening serial port.\n");
-        return err;
-    }
+    dl.startSession();
 
-    err = dl.identifyCamera();
-    if (err) {
-        printf("Error identifying camera\n");
-        return err;
-    }
-
-    if (dl.getCameraType() == cameraN90) {
-        printf("Camera is a N90\n");
-    } else if (dl.getCameraType() == cameraN90s) {
-        printf("Camera is a N90s\n");
-    } else {
-        printf("Camera is unknown\n");
-    }
-
-    if (dl.switchBaudrate()) {
-        printf("Switched baudrate to 9600bps\n");
-    } else {
-        printf("Baudrate switch failed\n");
-    }
+    dl.endSession();
     return 0;
 }

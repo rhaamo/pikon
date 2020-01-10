@@ -28,6 +28,77 @@ void NikonDatalink::setLogLevel (int log_level) {
 }
 
 /**
+ * @brief Start session with camera
+ * 
+ * @return int 
+ */
+int NikonDatalink::startSession () {
+    log_info("Starting session.");
+
+    int err = serialOpen();
+    if (err) {
+        log_error("Error opening serial port.");
+        return err;
+    }
+
+    err = identifyCamera();
+    if (err) {
+        log_error("Error identifying camera");
+        return err;
+    }
+
+    if (getCameraType() == cameraN90) {
+        log_info("Camera is a N90");
+    } else if (getCameraType() == cameraN90s) {
+        log_info("Camera is a N90s");
+    } else {
+        log_error("Camera is unknown");
+        return -1;
+    }
+
+    if (switchBaudrate()) {
+        log_info("Switched baudrate to 9600bps");
+    } else {
+        log_error("Baudrate switch failed");
+    }
+}
+
+/**
+ * @brief End the session
+ * 
+ * @return int 
+ */
+int NikonDatalink::endSession () {
+    log_info("Ending session.");
+
+    SignoffPacket sp;
+    int err = 0;
+    bool retry;
+
+    if (cameraType == CameraType::unknown) {
+        sp_flush(serialPort, SP_BUF_INPUT);
+        serialClose();
+        log_error("Session isn't started");
+        return -1;
+    }
+
+RETRY_SIGNOFF:
+    sp.signoffWord = 0x0404;
+
+    err = writeData(&sp, kSignoffPacketSize);
+    err = readData(&sp, kSignoffPacketSize);
+    if ((err || (sp.signoffWord != 0x0404)) && (retry == false)) {
+        retry = true;
+        goto RETRY_SIGNOFF;
+    }
+    sp_flush(serialPort, SP_BUF_INPUT);
+    serialClose();
+
+    usleep(200);
+    return err;
+}
+
+/**
  * @brief Open serial port with wanted name and baudrate
  * 
  * @return int 
@@ -63,7 +134,6 @@ int NikonDatalink::serialOpen () {
 int NikonDatalink::serialClose () {
     if (serialPort) {
         sp_close(serialPort);
-        sp_free_port(serialPort);
     } else {
         log_error("Serial port == NULL, cannot close");
     }

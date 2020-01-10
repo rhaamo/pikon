@@ -27,11 +27,10 @@ class NikonDatalink {
     public:
         NikonDatalink(const char *serialPort);
         ~NikonDatalink();
-        int serialOpen();
-        int identifyCamera();
+        int startSession();
+        int endSession();
         CameraType getCameraType();
         void setLogLevel(int);
-        bool switchBaudrate();
 
         const char *serialPortName;
 
@@ -45,6 +44,9 @@ class NikonDatalink {
         void makeDataPacket(unsigned char *buf, int size);
         int readDataPacket(unsigned char *buf, int size);
         int readStatusPacket();
+        int serialOpen();
+        int identifyCamera();
+        bool switchBaudrate();
 
         struct sp_port *serialPort;
         char cameraName[kCameraNameBufSize];

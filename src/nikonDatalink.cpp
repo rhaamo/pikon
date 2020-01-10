@@ -230,7 +230,7 @@ int NikonDatalink::writeDataSlow (const void *buf, int size) {
     unsigned int i;
     char *p;
 
-    log_debug("writeDataSlow: '%s'", buf);
+    log_debug("writeDataSlow: '%s', size: %i", buf, size);
 
     sp_flush(serialPort, SP_BUF_INPUT);
 
@@ -277,6 +277,8 @@ int NikonDatalink::writeData (const void *buf, int size) {
  * @param buf Buffer content
  * @param size Size of buffer
  * @return int 0 if expected count, else error
+ * 
+ * This function return code sort-of emulate the readData + serialRead10 something from palm os/n90 buddy
  */
 int NikonDatalink::readData (void *buf, int size) {
     unsigned long byteCount = 0;
@@ -334,7 +336,7 @@ bool NikonDatalink::switchBaudrate() {
  * @return int 0 if ok; <0 if err
  */
 int NikonDatalink::sendCommand(int mode, unsigned long address, void *buf, int size) {
-    log_debug("Sending command, mode: %i, address: %u, buffer: %s, size: %i", mode, address, buf, size);
+    log_debug("Sending command, mode: 0x%hhx, address: %u, buffer: %s, size: %i", mode, address, buf, size);
 
     int partial;
     int err = 0;
@@ -372,7 +374,7 @@ ERROR:
  * @return int 0 = ok, <0 = lol rip
  */
 int NikonDatalink::sendCommandLoop(int mode, unsigned long address, void *buf, int size) {
-    log_debug("Sending command loop, mode: %i, address: %u, buffer: %s, size: %i", mode, address, buf, size);
+    log_debug("Sending command loop, mode: 0x%hhx, address: %u, buffer: %s, size: %i", mode, address, buf, size);
 
     CommandPacket cp;
     char retry;
@@ -480,6 +482,8 @@ ERROR:
  * @param size 
  */
 void NikonDatalink::makeDataPacket(unsigned char *buf, int size) {
+    log_debug("making a data packet with buf=%s, size=%i", buf, size);
+
     unsigned char *p;
     unsigned char cs;
     unsigned int count;
@@ -513,6 +517,8 @@ void NikonDatalink::makeDataPacket(unsigned char *buf, int size) {
  * @return int 
  */
 int NikonDatalink::readDataPacket(unsigned char *buf, int size) {
+    log_debug("reading a data packet with buf=%s, size=%i", buf, size);
+
     int err;
     unsigned char *p;
     unsigned char cs;
@@ -555,6 +561,8 @@ ERROR:
  * @return int 
  */
 int NikonDatalink::readStatusPacket() {
+    log_debug("reading packet status");
+
     StatusPacket ep;
     int err;
 
@@ -569,4 +577,18 @@ int NikonDatalink::readStatusPacket() {
 
 ERROR:
     return err;
+}
+
+void NikonDatalink::focus() {
+    log_info("Triggering focus");
+    unsigned char focus = 0x08;
+
+    sendCommand(kReadDataMode, 0x0000FD39, &focus, 1);
+    focus = 0x08;
+    sendCommand(kWriteDataMode, 0x0000FD39, &focus, 1);
+    sendCommand(kFocusMode, 0, 0, 0);
+    usleep(30);
+    sendCommand(kReadDataMode, 0x0000FD39, &focus, 1);
+    focus = 0x00;
+    sendCommand(kWriteDataMode, 0x0000FD39, &focus, 1);
 }

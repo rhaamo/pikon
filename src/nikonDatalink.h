@@ -31,6 +31,7 @@ class NikonDatalink {
         int endSession();
         CameraType getCameraType();
         void setLogLevel(int);
+        void focus();
 
         const char *serialPortName;
 
@@ -54,7 +55,7 @@ class NikonDatalink {
         unsigned char serialBuffer[kSerialBufSize];
         int logLevel = LOG_ERROR;
         int serialPortBaudrate = 1200;
-        bool baudrateChange = true;
+        bool baudrateChange = false;
 };
 
 #endif

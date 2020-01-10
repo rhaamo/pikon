@@ -30,6 +30,9 @@ int main(int argc, char **argv) {
 
     dl.startSession();
 
+    // Camera focus
+    dl.focus();
+
     dl.endSession();
     return 0;
 }

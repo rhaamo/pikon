@@ -85,7 +85,7 @@ int NikonDatalink::identifyCamera () {
     log_info("Identifying camera...");
     log_info("Sending wakeup string...");
 
-    err = writeData(kNullString, 1);
+    err = writeDataSlow(kNullString, 1);
     if (err != SP_OK) {
         log_error("SP_ERR: %s", sp_last_error_message());
         goto ERROR;
@@ -95,7 +95,7 @@ RETRY_QUERY:
     done = false;
 
     log_info("Sending nikon inquiry string...");
-    err = writeDataSlow(kQueryString, kQueryStringSize);
+    err = writeData(kQueryString, kQueryStringSize);
     if (err != SP_OK) {
         log_error("%s", sp_last_error_message());
         goto ERROR;
@@ -169,7 +169,8 @@ int NikonDatalink::writeDataSlow (const void *buf, int size) {
         // delay, whatever, 200ms
         // original PalmOS port was using a SysTaskDelay(1)
         usleep(200);
-        sp_return err = sp_blocking_write(serialPort, p, 1, 0);
+        sp_blocking_write(serialPort, p, 1, 0);
+        sp_return err = sp_drain(serialPort);
         if (err != SP_OK) {
             log_error("Cannot write one byte: %s", sp_last_error_message());
             return err;
@@ -191,7 +192,8 @@ int NikonDatalink::writeData (const void *buf, int size) {
 
     sp_flush(serialPort, SP_BUF_INPUT);
 
-    sp_return err = sp_blocking_write(serialPort, buf, size, 0);
+    sp_blocking_write(serialPort, buf, size, 0);
+    sp_return err = sp_drain(serialPort);
     if (err != SP_OK) {
         log_error("Cannot write buffer: %s", sp_last_error_message());
     }
@@ -204,7 +206,7 @@ int NikonDatalink::writeData (const void *buf, int size) {
  * 
  * @param buf Buffer content
  * @param size Size of buffer
- * @return int 
+ * @return int 0 if expected count, else error
  */
 int NikonDatalink::readData (void *buf, int size) {
     unsigned long byteCount = 0;
@@ -215,16 +217,22 @@ int NikonDatalink::readData (void *buf, int size) {
     }
 
     int readCount = sp_blocking_read(serialPort, buf, size, kSerialTimeout);
-    if (readCount > 0 && (readCount != size)) {
-        err = kPacketSizeErr;
-        sp_flush(serialPort, SP_BUF_INPUT);
-    } else if (readCount < 0) {
-        sp_flush(serialPort, SP_BUF_INPUT);
-        err = -1;
+    if (readCount < 0) {
+        if ((readCount > 0) && (readCount != size)) {
+            err = kPacketSizeErr;
+            sp_flush(serialPort, SP_BUF_INPUT);
+        } else {
+            sp_flush(serialPort, SP_BUF_INPUT);
+            err = readCount;
+        }
+        log_debug("Error re\ading datas: %s", sp_last_error_message());
+    } else if (readCount == size) {
+        err = 0; // it's ok
+    } else {
+        err = -1; // oopsie
     }
 
-    log_debug("%s", sp_last_error_message());
-    log_debug("readData: '%s'", buf);
+    log_debug("readData: '%s', read: %i, err: %i", buf, readCount, err);
 
     return err;
 }

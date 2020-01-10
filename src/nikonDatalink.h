@@ -4,6 +4,7 @@
 #include <libserialport.h>
 #include <string.h>
 
+#include "log.h"
 #include "nikonPackets.h"
 #include "nikonErrors.h"
 
@@ -18,6 +19,7 @@ class NikonDatalink {
         int serialOpen();
         int identifyCamera();
         CameraType getCameraType();
+        void setLogLevel(int);
 
         const char *serialPortName;
         int serialPortBaudrate;
@@ -25,12 +27,14 @@ class NikonDatalink {
     private:
         int serialClose();
         int writeDataSlow(const void *buf, int size);
+        int writeData (const void *buf, int size);
         int readData(void *buf, int size);
 
         struct sp_port *serialPort;
         char cameraName[kCameraNameBufSize];
         CameraType cameraType = CameraType::unknown;
         unsigned char serialBuffer[kSerialBufSize];
+        int logLevel = LOG_ERROR;
 };
 
 #endif

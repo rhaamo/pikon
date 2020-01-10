@@ -26,13 +26,13 @@ int main(int argc, char **argv) {
 
     NikonDatalink dl(getoptPort, 1200);
 
+    dl.setLogLevel(LOG_DEBUG);
+
     int err = dl.serialOpen();
     if (err) {
         printf("Error opening serial port.\n");
         return err;
     }
-
-    printf("Serial port opened: %s\n", dl.serialPortName);
 
     err = dl.identifyCamera();
     if (err) {

@@ -23,6 +23,11 @@ NikonDatalink::~NikonDatalink () {
     serialClose();
 }
 
+void NikonDatalink::setLogLevel (int log_level) {
+    log_set_level(log_level);
+    logLevel = log_level;
+}
+
 /**
  * @brief Open serial port with wanted name and baudrate
  * 
@@ -36,13 +41,18 @@ int NikonDatalink::serialOpen () {
         if (error == SP_OK) {
             sp_set_baudrate(serialPort, serialPortBaudrate);
         } else {
-            printf("Error opening serial device: %s\n", serialPortName);
+            log_fatal("Error opening serial device: %s", serialPortName);
             return error;
         }
     } else {
-        printf("Error finding serial device\n");
+        log_fatal("Error finding serial device");
+        log_fatal("%s", sp_last_error_message());
         return error;
     }
+
+    log_info("libserialport version: %s", sp_get_package_version_string());
+    log_info("Port name: %s", sp_get_port_name(serialPort));
+    log_info("Description: %s", sp_get_port_description(serialPort));
     return 0;
 }
 
@@ -53,9 +63,10 @@ int NikonDatalink::serialOpen () {
  */
 int NikonDatalink::serialClose () {
     if (serialPort) {
-        return sp_close(serialPort);
+        sp_close(serialPort);
+        sp_free_port(serialPort);
     } else {
-        printf("Serial port == NULL, cannot close\n");
+        log_error("Serial port == NULL, cannot close");
     }
     return 0;
 }
@@ -71,15 +82,22 @@ int NikonDatalink::identifyCamera () {
     unsigned char *p;
     int err;
 
-    err = writeDataSlow(&kNullString, 1);
+    log_info("Identifying camera...");
+    log_info("Sending wakeup string...");
+
+    err = writeData(kNullString, 1);
     if (err != SP_OK) {
+        log_error("SP_ERR: %s", sp_last_error_message());
         goto ERROR;
     }
 
 RETRY_QUERY:
     done = false;
+
+    log_info("Sending nikon inquiry string...");
     err = writeDataSlow(kQueryString, kQueryStringSize);
     if (err != SP_OK) {
+        log_error("%s", sp_last_error_message());
         goto ERROR;
     }
 
@@ -142,6 +160,8 @@ int NikonDatalink::writeDataSlow (const void *buf, int size) {
     unsigned int i;
     char *p;
 
+    log_debug("writeDataSlow: '%s'", buf);
+
     sp_flush(serialPort, SP_BUF_INPUT);
 
     p = (char *)buf;
@@ -151,12 +171,33 @@ int NikonDatalink::writeDataSlow (const void *buf, int size) {
         usleep(200);
         sp_return err = sp_blocking_write(serialPort, p, 1, 0);
         if (err != SP_OK) {
+            log_error("Cannot write one byte: %s", sp_last_error_message());
             return err;
         }
         p++;
     }
     return SP_OK;
 }
+
+/**
+ * @brief Write buffer to serial port
+ * 
+ * @param buf Buffer content
+ * @param size Buffer size
+ * @return int 
+ */
+int NikonDatalink::writeData (const void *buf, int size) {
+    log_debug("writeData: '%s'", buf);
+
+    sp_flush(serialPort, SP_BUF_INPUT);
+
+    sp_return err = sp_blocking_write(serialPort, buf, size, 0);
+    if (err != SP_OK) {
+        log_error("Cannot write buffer: %s", sp_last_error_message());
+    }
+    return err;
+}
+
 
 /**
  * @brief Read datas from serial port
@@ -181,6 +222,9 @@ int NikonDatalink::readData (void *buf, int size) {
         sp_flush(serialPort, SP_BUF_INPUT);
         err = -1;
     }
+
+    log_debug("%s", sp_last_error_message());
+    log_debug("readData: '%s'", buf);
 
     return err;
 }

@@ -4,7 +4,7 @@
 #include <getopt.h>
 
 int main(int argc, char **argv) {
-    const char *getoptPort = "/dev/ttyUSB0";
+    const char *getoptPort = "/dev/tty.usbserial-00000000";
 
     for (;;) {
         switch(getopt(argc, argv, "hp:")) {

@@ -35,16 +35,20 @@ void NikonDatalink::setLogLevel (int log_level) {
 int NikonDatalink::startSession () {
     log_info("Starting session.");
 
+    sessionErr = 0;
+
     int err = serialOpen();
     if (err) {
         log_error("Error opening serial port.");
-        return err;
+        sessionErr = err;
+        goto ERROR;
     }
 
     err = identifyCamera();
     if (err) {
         log_error("Error identifying camera");
-        return err;
+        sessionErr = err;
+        goto ERROR;
     }
 
     if (getCameraType() == cameraN90) {
@@ -53,13 +57,24 @@ int NikonDatalink::startSession () {
         log_info("Camera is a N90s");
     } else {
         log_error("Camera is unknown");
-        return -1;
+        err = -1;
+        sessionErr = err;
+        goto ERROR;
     }
 
     if (switchBaudrate()) {
         log_info("Switched baudrate to 9600bps");
     } else {
         log_error("Baudrate switch failed");
+        err = -1;
+        sessionErr = err;
+        goto ERROR;
+    }
+
+ERROR:
+    if (sessionErr) {
+        log_fatal("SessionError: %i", sessionErr);
+        endSession();
     }
     return err;
 }
@@ -96,7 +111,7 @@ RETRY_SIGNOFF:
     serialClose();
 
     usleep(200);
-    return err;
+    return sessionErr;
 }
 
 /**
@@ -152,6 +167,11 @@ int NikonDatalink::identifyCamera () {
     unsigned char *p;
     int err;
 
+    if (sessionErr) {
+        log_fatal("SessionError: %i", sessionErr);
+        return sessionErr;
+    }
+
     log_info("Identifying camera...");
     log_info("Sending wakeup string...");
 
@@ -204,6 +224,7 @@ RETRY_QUERY:
     }
 
 ERROR:
+    sessionErr = err;
     return err;
 }
 
@@ -230,6 +251,11 @@ int NikonDatalink::writeDataSlow (const void *buf, int size) {
     unsigned int i;
     char *p;
 
+    if (sessionErr) {
+        log_fatal("SessionError: %i", sessionErr);
+        return sessionErr;
+    }
+
     log_debug("writeDataSlow: '%s', size: %i", buf, size);
 
     sp_flush(serialPort, SP_BUF_INPUT);
@@ -243,6 +269,7 @@ int NikonDatalink::writeDataSlow (const void *buf, int size) {
         sp_return err = sp_drain(serialPort);
         if (err != SP_OK) {
             log_error("Cannot write one byte: %s", sp_last_error_message());
+            sessionErr = err;
             return err;
         }
         p++;
@@ -258,6 +285,11 @@ int NikonDatalink::writeDataSlow (const void *buf, int size) {
  * @return int 
  */
 int NikonDatalink::writeData (const void *buf, int size) {
+    if (sessionErr) {
+        log_fatal("SessionError: %i", sessionErr);
+        return sessionErr;
+    }
+
     log_debug("writeData: '%s'", buf);
 
     sp_flush(serialPort, SP_BUF_INPUT);
@@ -266,7 +298,9 @@ int NikonDatalink::writeData (const void *buf, int size) {
     sp_return err = sp_drain(serialPort);
     if (err != SP_OK) {
         log_error("Cannot write buffer: %s", sp_last_error_message());
+        sessionErr = err;
     }
+
     return err;
 }
 
@@ -283,6 +317,11 @@ int NikonDatalink::writeData (const void *buf, int size) {
 int NikonDatalink::readData (void *buf, int size) {
     unsigned long byteCount = 0;
     int err;
+
+    if (sessionErr) {
+        log_fatal("SessionError: %i", sessionErr);
+        return sessionErr;
+    }
 
     if (size > kSerialBufSize) {
         return kPacketTooLargeErr;
@@ -336,6 +375,11 @@ bool NikonDatalink::switchBaudrate() {
  * @return int 0 if ok; <0 if err
  */
 int NikonDatalink::sendCommand(int mode, unsigned long address, void *buf, int size) {
+    if (sessionErr) {
+        log_fatal("SessionError: %i", sessionErr);
+        return sessionErr;
+    }
+    
     log_debug("Sending command, mode: 0x%hhx, address: %u, buffer: %s, size: %i", mode, address, buf, size);
 
     int partial;
@@ -349,6 +393,7 @@ int NikonDatalink::sendCommand(int mode, unsigned long address, void *buf, int s
 
         err = sendCommandLoop(mode, address, buf, partial);
         if (err) {
+            sessionErr = err;
             goto ERROR;
         }
 
@@ -361,7 +406,7 @@ int NikonDatalink::sendCommand(int mode, unsigned long address, void *buf, int s
     } while (size > 0);
 
 ERROR:
-    return 0;
+    return err;
 }
 
 /**
@@ -375,6 +420,11 @@ ERROR:
  */
 int NikonDatalink::sendCommandLoop(int mode, unsigned long address, void *buf, int size) {
     log_debug("Sending command loop, mode: 0x%hhx, address: %u, buffer: %s, size: %i", mode, address, buf, size);
+
+    if (sessionErr) {
+        log_fatal("SessionError: %i", sessionErr);
+        return sessionErr;
+    }
 
     CommandPacket cp;
     char retry;
@@ -458,6 +508,7 @@ COMMAND_RETRY:
     }
 
     if (err) {
+        sessionErr = err;
         goto ERROR;
     }
 
@@ -465,6 +516,7 @@ COMMAND_RETRY:
         int baudErr = sp_set_baudrate(serialPort, 9600);
         if (baudErr != SP_OK) {
             log_fatal("Error setting baudrate to 9600: %s", sp_last_error_message());
+            sessionErr = err;
             goto ERROR;
         }
         usleep(200);

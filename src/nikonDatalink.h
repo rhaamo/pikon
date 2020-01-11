@@ -56,6 +56,7 @@ class NikonDatalink {
         int logLevel = LOG_ERROR;
         int serialPortBaudrate = 1200;
         bool baudrateChange = false;
+        int sessionErr;
 };
 
 #endif

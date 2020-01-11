@@ -111,6 +111,9 @@ RETRY_SIGNOFF:
     serialClose();
 
     usleep(200);
+
+    // Assumes it's good
+    sessionErr = 0; // and reset the session
     return sessionErr;
 }
 
@@ -379,7 +382,7 @@ int NikonDatalink::sendCommand(int mode, unsigned long address, void *buf, int s
         log_fatal("SessionError: %i", sessionErr);
         return sessionErr;
     }
-    
+
     log_debug("Sending command, mode: 0x%hhx, address: %u, buffer: %s, size: %i", mode, address, buf, size);
 
     int partial;
@@ -643,4 +646,13 @@ void NikonDatalink::focus() {
     sendCommand(kReadDataMode, 0x0000FD39, &focus, 1);
     focus = 0x00;
     sendCommand(kWriteDataMode, 0x0000FD39, &focus, 1);
+}
+
+/**
+ * @brief Return the current session error
+ * 
+ * @return int 
+ */
+int NikonDatalink::getSessionError() {
+    return sessionErr;
 }

@@ -32,6 +32,7 @@ class NikonDatalink {
         CameraType getCameraType();
         void setLogLevel(int);
         void focus();
+        int getSessionError();
 
         const char *serialPortName;
 

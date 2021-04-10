@@ -1,0 +1,236 @@
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="balint kis">
+   <title>gIcon, The Open Source Management Software For The F90X/N90s Nikon Cameras</title>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF" link="#006666" vlink="#663366" alink="#000088">
+
+<center>
+<table cellspacing=0 cellpadding=0 width="600" height="100%" >
+<tr>
+<td align=center valign=top></td>
+</tr>
+<tr>
+<td>
+<p><br>
+<h1>Main</h1>
+
+<center>
+<p><br>
+<table border=0 cellspacing=0 cellpadding=0 width="100%" bgcolor="#006666" >
+<tr>
+<td align=center valign=center><a href="../index.html"            style="text-decoration: none"><b><font color="#ffffff" size=+1>Intro      </font></b></a></td>
+<td align=center valign=center><a href="../main/index.html"       style="text-decoration: none"><b><font color="#ffffff" size=+1>Main       </font></b></a></td>
+<td align=center valign=center><a href="../controls/index.html"   style="text-decoration: none"><b><font color="#ffffff" size=+1>Controls   </font></b></a></td>
+<td align=center valign=center><a href="../settings/index.html"   style="text-decoration: none"><b><font color="#ffffff" size=+1>Settings   </font></b></a></td>
+<td align=center valign=center><a href="../status/index.html"     style="text-decoration: none"><b><font color="#ffffff" size=+1>Status     </font></b></a></td>
+<td align=center valign=center><a href="../print/index.html"      style="text-decoration: none"><b><font color="#ffffff" size=+1>Print      </font></b></a></td>
+<td align=center valign=center><a href="../properties/index.html" style="text-decoration: none"><b><font color="#ffffff" size=+1>Properties </font></b></a></td>
+<td align=center valign=center><a href="../license.html"          style="text-decoration: none"><b><font color="#ffffff" size=+1>License    </font></b></a></td>
+</tr>
+</table>
+</center>
+
+<ul>
+<li><a href="#connect">Get Connected</a></li>
+<li><a href="#menus">Menus</a></li>
+<li><a href="#toolbar">Toolbar</a></li>
+<li><a href="#formats">File Formats</a></li>
+<li><a href="#download">Download</a></li>
+<li><a href="#preview">Preview</a></li>
+<li><a href="#delete">Delete</a></li>
+</ul>
+
+<center><hr noshade width="100%"></center>
+
+<p><br>
+<a name="connect"></a>
+<h2>Get Connected</h2>
+Connect the camera to your computer via an MC-31 or MC-33 data link cable.
+In case you wish to make your own cable, modifying an
+MC-30 remote release you can find the schematics on <a href="http://members.aol.com/khancock/pilot.html">Ken
+Hancock's home page</a>.
+<p>Turn on the camera and start gIcon on you computer. In the Properties
+dialog select the appropiate serial line, and save the settings choosing
+<b>OK</b>.
+Now that the camera is connected and gIcon knows which serial line to talk
+to, you should attempt to display the <b>Settings</b> window, via the toolbar
+or by selecting the related menu item.
+<p>If the connection has been established you should see the progress,
+on the Settings window, as it updates the attributes in the window. In
+the mean time the camera should indicate that it is talking to your computer
+by blinking the Organizer icon, on the camera's LCD.
+<p><img src="lcd.blink.gif" hspace=2 vspace=2>
+<p>As you apply any setting the <img src="custom.gif">
+inscription will appear on the camera's LCD, and stay there. You can remove
+all custom settings by pressing and holding down the green buttons of your
+camera until the <img src="custom.gif">
+inscription starts blinking.
+<p>The data link cable is powered via the 10 pin remote terminal. It is
+wise to disconnect the datalink cable while it is not in use.
+
+<p><br>
+<a name="menus"></a>
+<h2>Menus</h2>
+<blockquote>
+<li><b>File</b> - contains file related operations.</li>
+<blockquote>
+<li><b>Open</b> - opens a roll previously saved in txt or nkn format, file format detection is content based.</li>
+<li><b>Save</b> - saves an opened and modified or newly downloaded roll</li>
+<li><b>Save As</b> - saves an opened or downloaded roll with the name specified by the user</li>
+<li><b>Save All</b> - saves all opened and modified or newly downloaded rolls.</li>
+<li><b>Close</b> - closes the currently visible roll, warns if the roll is unsaved</li>
+<li><b>Close All</b> - closes all opened rolls, warns if there are any unsaved rolls</li>
+<li><b>Print</b> - displays the printer dialog.</li>
+<li><b>Exit</b> - quits gIcon, warns if there is any unsaved information.</li>
+</blockquote>
+
+<li><b>Edit</b></li>
+<blockquote>
+<li><b>Properties</b> - displays the properties dialog.</li>
+</blockquote>
+
+<li><b>View</b></li>
+<blockquote>
+<li><b>Controls</b> - displays the control window</li>
+<li><b>Settings</b> - displays the setting window</li>
+</blockquote>
+
+<li><b>Memo</b></li>
+<blockquote>
+<li><b>Download</b> - downloads the shooting data stored in the camera, except the current roll</li>
+<li><b>Preview</b> - downloads the current roll only</li>
+<li><b>Delete</b> - removes all rolls store in the camera except the current roll</li>
+<li><b>Status</b> - displays the status window</li>
+</blockquote>
+
+<li><b>Help</b></li>
+<blockquote>
+<li><b>Manual</b> - launches the help browser</li>
+<li><b>License</b> - launches the help browser displaying the GNU General Public License</li>
+<li><b>About</b> - silly useless dialog.</li>
+</blockquote>
+</blockquote>
+
+<p><br>
+<p><a name="formats"></a>
+<h2>File Formats</h2>
+gIcon supports the following file formats:
+
+<center><hr size=1 noshade width="100%"></center>
+<table cellspacing=0 cellpadding=0 cols=3 width="100" >
+<tr>
+<td width="80">Format</td>
+<td width="80">Extension</td>
+<td width="440">Description</td>
+</tr>
+</table>
+<center><hr size=1 noshade width="100%"></center>
+<table cellspacing=0 cellpadding=0 cols=3 width="100" >
+<tr>
+<td width="80">Text</td>
+<td width="80">.txt</td>
+<td width="440">The data is stored in a text file whit tabs between the items, providing easy access to post process the shooting data.</td>
+</tr>
+<tr>
+<td>Binary</td>
+<td>.nkn</td>
+<td><br>
+The data is stored in the format used by Nikon's Photo Secretary, providing maximum compatibility with your existing files.</td>
+</tr>
+</table>
+<center><hr SIZE=1 NOSHADE width="100%"></center>
+
+When opening a file, gIcon will determine the file format by checking the file content,
+and not by its extension. When saving however it will check the extension of the file.
+If no extension is specified, the <a href="../properties/index.html#defaultformat">Default
+File Format</a> will be used, and no extension will be appended to the file name.
+
+<p><br>
+<a name="toolbar"></a>
+<h2>Toolbar</h2>
+<img src="toolbar.gif">
+<p>The main toolbar features some of the menu functions. They are:
+<ul>
+<li><b>Download</b> - will download and remove the shooting data.</li>
+<li><b>Preview</b> - will download the current roll, but will not remove that (of course)</li>
+<li><b>Status</b> - displays the memo holder status window</li>
+<li><b>Controls</b> - displays camera controls window</li>
+<li><b>Settings</b> - displays camera settings window</li>
+<li><b>Help</b> - displays this page.</li>
+</ul>
+
+<p><br>
+<p><a name="download"></a>
+<h2>Download</h2>
+By pressing the <b>Download</b> button on
+the toolbar or selecting the right menu item, gIcon will download all the
+rolls stored in the camera and create a separate notebook page for each
+roll. These rolls are not saved, however a unique file name is assigned to each
+of them. You can save the rolls by selecting the <b>Save All</b> menu
+command.
+<p><img src="main.gif">
+<p>You can change the file names by saving the rolls with the <b>Save As</b>
+command, however you will have to repeat this process for each of the downloaded rolls.
+<p>Each roll has an editable <b>Roll Title</b>, and each frame has a caption.
+The following screenshot presents how to modify a caption.
+<p><img src="download.gif">
+<p>Select the desired roll by selecting the related notebook page. Select
+a frame within the roll, by clicking on the frame's row. The current frame's
+caption appears in the caption editor. You can now modify
+the caption which will be updated as you type.
+
+<p><br>
+<a name="preview"></a>
+<h2>Preview</h2>
+This feature is similar to the <b>Download</b>.
+It will download the current roll's shooting data only. This way you can
+track back settings used on a previous frames, within the current roll.
+<p><img src="preview.gif">
+
+
+<p><br>
+<a name="delete"></a>
+<h2>Delete</h2>
+Normally the downloaded data should be automatically removed from the camera,
+but what if a failure occurs while you save it? To avoid loss of data you have
+to remove the shooting data from your camera manually, selecting the <b>Delete</b>
+menu item in the Memo menu. If you have removed the shooting data accidentally,
+it is possible to undo the deletion, however this feature is not supported by gIcon.
+In this unlikely case contact <a href="mailto:balint.kis@mail.com">me</a>, to get
+some instructions.
+
+<p><br>
+<b><font color="red">WARNING</font></b>
+<p>
+I could not test the downloader's behavior when the memo holder's ring buffer wraps around.
+If you download suspicious data from your camera, that means that there is a bug in the downloader.
+In this case do not remove the data from your camera, but contact
+<a href="mailto:balint.kis@mail.com">me</a>. I still have to shoot 15 rolls in order
+to get to that point when my camera's buffer wraps around. Than I will repeat
+my test cases and if I find any misbehavior I will prepare a new release.
+
+<center>
+<p><br>
+<table border=0 cellspacing=0 cellpadding=0 width="100%" bgcolor="#006666" >
+<tr>
+<td align=center valign=center><a href="../index.html"            style="text-decoration: none"><b><font color="#ffffff" size=+1>Intro      </font></b></a></td>
+<td align=center valign=center><a href="../main/index.html"       style="text-decoration: none"><b><font color="#ffffff" size=+1>Main       </font></b></a></td>
+<td align=center valign=center><a href="../controls/index.html"   style="text-decoration: none"><b><font color="#ffffff" size=+1>Controls   </font></b></a></td>
+<td align=center valign=center><a href="../settings/index.html"   style="text-decoration: none"><b><font color="#ffffff" size=+1>Settings   </font></b></a></td>
+<td align=center valign=center><a href="../status/index.html"     style="text-decoration: none"><b><font color="#ffffff" size=+1>Status     </font></b></a></td>
+<td align=center valign=center><a href="../print/index.html"      style="text-decoration: none"><b><font color="#ffffff" size=+1>Print      </font></b></a></td>
+<td align=center valign=center><a href="../properties/index.html" style="text-decoration: none"><b><font color="#ffffff" size=+1>Properties </font></b></a></td>
+<td align=center valign=center><a href="../license.html"          style="text-decoration: none"><b><font color="#ffffff" size=+1>License    </font></b></a></td>
+</tr>
+</table>
+</center>
+
+</td>
+</tr>
+</table></center>
+
+</body>
+</html>

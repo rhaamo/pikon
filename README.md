@@ -25,6 +25,11 @@ git submodule update
 - Sending focusing command (segfault, might be related to baud switch)
 - Everything else
 
+### TODO
+- Focus, commands, etc. (might be N90s only, waiting to receive it for testing)
+- Export of the 'exif-like' datas (the memo I think)
+- Setting various camera infos (exposure, ISO, etc.)
+
 ## Resources
 
 See the folder `docs/`.

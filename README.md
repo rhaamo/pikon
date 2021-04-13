@@ -1,6 +1,6 @@
 # PIKON
 
-Work in progress set of tools to use the Nikon DataLink present on the Nikon N90/N90s (F90/F90x).
+Work in progress set of tools to use the Nikon DataLink remote control protocol present on the Nikon N90/N90s (F90/F90x).
 
 ## Installation
 

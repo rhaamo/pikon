@@ -96,3 +96,8 @@ nikon@ubuntu-shared:~/pikon_new$
 
 # Contact
 dashie (at) otter (dot) sh
+
+# Copyright
+
+- Everything under docs/ are under their own (GPL2 for gicon, non-specified for the rest)
+- Our code is MIT

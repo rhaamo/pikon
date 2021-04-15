@@ -62,24 +62,6 @@ int NikonDatalink::startSession () {
         goto ERROR;
     }
 
-    /*
-    Move switchBaudrate() to public in its own command
-    so we do
-    dl.StartSession()
-    dl.SwitchBaudrate()
-    dl.Whatever()
-    d.EndSession()
-
-    if (switchBaudrate()) {
-        log_info("Switched baudrate to 9600bps");
-    } else {
-        log_error("Baudrate switch failed");
-        err = -1;
-        sessionErr = err;
-        goto ERROR;
-    }
-    */
-
 ERROR:
     if (sessionErr) {
         log_fatal("SessionError: %i", sessionErr);

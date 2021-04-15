@@ -33,6 +33,9 @@ RESPONSE:	$31 30 32 30 46 39 30 58		1020F90X
 #define kN90sResponseString		"1020F90X/N90S"
 #define kN90ResponseString		"1010F90/N90"
 
+// Different names between USA and everywhere else
+// N90 is also F90
+// N90s is also F90x
 typedef enum {
 	unknown, cameraN90, cameraN90s
 } CameraType;

@@ -100,5 +100,10 @@ dashie (at) otter (dot) sh
 
 # Copyright
 
-- Everything under docs/ are under their own (GPL2 for gicon, non-specified for the rest)
-- Our code is MIT
+Everything under docs/ are under their own (GPL2 for gicon, non-specified for the rest) and out of the scope of the utils.
+
+Everything under ext/ are external libraries not packaged that we uses.
+
+For our code:
+- MIT licensed
+- Some files has been used from 'N90 Buddy for Palm' by Ken Hancock

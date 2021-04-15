@@ -1,6 +1,13 @@
 #ifndef NIKON_ERRORS_H
 #define NIKON_ERRORS_H
 
+/* Initially N90sErrors.h
+	Written by:	Ken Hancock
+
+	Copyright:	Copyright � Ken Hancock, All Rights Reserved
+*/
+
+// this seemed a magical PalmOS thing
 #define appErrorClass 1008
 
 #define	kWrongCameraErr		(appErrorClass | 0)

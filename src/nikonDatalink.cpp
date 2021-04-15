@@ -309,7 +309,6 @@ int NikonDatalink::writeData (const void *buf, int size) {
  * This function return code sort-of emulate the readData + serialRead10 something from palm os/n90 buddy
  */
 int NikonDatalink::readData (void *buf, int size) {
-    unsigned long byteCount = 0;
     int err;
 
     if (sessionErr) {

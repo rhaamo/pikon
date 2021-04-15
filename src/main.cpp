@@ -9,6 +9,8 @@ struct Options {
 };
 
 void identify_camera(Options const &opt);
+void focus(Options const &opt);
+
 
 int main(int argc, char **argv) {
     CLI::App app("Pikon DataLink");
@@ -20,8 +22,11 @@ int main(int argc, char **argv) {
     // optSerialPort->option_text("PORT");
     optSerialPort->default_val("/dev/ttyUSB0");
 
-    CLI::App *identify = app.add_subcommand("identify", "Identify camera");
-    identify->callback([opts]() { identify_camera(*opts); });
+    CLI::App *cmdIdentify = app.add_subcommand("identify", "Identify camera");
+    cmdIdentify->callback([opts]() { identify_camera(*opts); });
+
+    CLI::App *cmdFocus = app.add_subcommand("focus", "trigger focus");
+    cmdFocus->callback([opts]() { focus(*opts); });
 
     app.require_subcommand();
 
@@ -42,3 +47,20 @@ void identify_camera(Options const &opt) {
 
     dl.endSession();
 }
+
+void focus(Options const &opt) {
+    NikonDatalink dl(opt.serialPort);
+
+    if (opt.debug) {
+        dl.setLogLevel(LOG_DEBUG);
+    } else {
+        dl.setLogLevel(LOG_INFO);
+    }
+
+    dl.startSession();
+
+    dl.switchBaudrate();
+    dl.focus();
+
+    dl.endSession();
+} 

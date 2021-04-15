@@ -2,6 +2,7 @@
 #define NIKON_DATALINK_H
 
 #include <libserialport.h>
+#include <string>
 #include <string.h>
 
 #include "log.h"
@@ -25,7 +26,7 @@
 
 class NikonDatalink {
     public:
-        NikonDatalink(const char *serialPort);
+        NikonDatalink(std::string);
         ~NikonDatalink();
         int startSession();
         int endSession();

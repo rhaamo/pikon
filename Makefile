@@ -3,12 +3,15 @@ SRC_DIRS ?= ./src
 
 CC = c++
 
+EXT_SRCS := ./ext/log.c/src/log.c
 
-SRCS := $(shell find $(SRC_DIRS) -name *.cpp -or -name *.c -or -name *.s) ./log.c/src/log.c
+SRCS := $(shell find $(SRC_DIRS) -name *.cpp -or -name *.c -or -name *.s) $(EXT_SRCS)
 OBJS := $(addsuffix .o,$(basename $(SRCS)))
 DEPS := $(OBJS:.o=.d)
 
-INC_DIRS := $(shell find $(SRC_DIRS) -type d) ./log.c/src/
+EXT_INCS := ./ext/log.c/src/ ./ext/CLI11/include
+
+INC_DIRS := $(shell find $(SRC_DIRS) -type d) $(EXT_INCS)
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 FLAGS_LIBSERIALPORT = $(shell pkg-config --cflags libserialport)

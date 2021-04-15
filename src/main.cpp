@@ -1,38 +1,44 @@
 #include "nikonDatalink.h"
 
 #include <stdio.h>
-#include <getopt.h>
+#include <CLI/CLI.hpp>
+
+struct Options {
+    std::string serialPort;
+    bool debug;
+};
+
+void identify_camera(Options const &opt);
 
 int main(int argc, char **argv) {
-    const char *getoptPort = "/dev/tty.usbserial-00000000";
+    CLI::App app("Pikon DataLink");
+    auto opts = std::make_shared<Options>();
 
-    for (;;) {
-        switch(getopt(argc, argv, "hp:")) {
-            case '?':
-            case 'h':
-                printf("Nikon N90/N90s toolbox.\n");
-                printf("Usage: %s [OPTION]...\n", argv[0]);
-                printf(" -h        This help\n");
-                printf(" -p PORT   Serial port to use, default: /dev/ttyUSB0\n");
-                return -1;
-            case 'p':
-                getoptPort = optarg;
-                continue;
-            default:
-                break;
-        }
-        break;
+    app.add_flag("-d,--debug", opts->debug, "Verbose logging");
+    auto optSerialPort = app.add_option("-p,--port", opts->serialPort, "Serial port to use, like /dev/ttyUSB0");
+    // for when https://github.com/CLIUtils/CLI11/pull/497 lands in a release
+    // optSerialPort->option_text("PORT");
+    optSerialPort->default_val("/dev/ttyUSB0");
+
+    CLI::App *identify = app.add_subcommand("identify", "Identify camera");
+    identify->callback([opts]() { identify_camera(*opts); });
+
+    app.require_subcommand();
+
+    CLI11_PARSE(app, argc, argv);
+
+}
+
+void identify_camera(Options const &opt) {
+    NikonDatalink dl(opt.serialPort);
+
+    if (opt.debug) {
+        dl.setLogLevel(LOG_DEBUG);
+    } else {
+        dl.setLogLevel(LOG_INFO);
     }
-
-    NikonDatalink dl(getoptPort);
-
-    dl.setLogLevel(LOG_DEBUG);
 
     dl.startSession();
 
-    // Camera focus
-    dl.focus();
-
     dl.endSession();
-    return 0;
 }

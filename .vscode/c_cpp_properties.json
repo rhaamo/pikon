@@ -4,12 +4,10 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/src/**",
-                "${workspaceFolder}/log.c/src/**"
+                "${workspaceFolder}/ext/log.c/src/**",
+                "${workspaceFolder}/ext/CLI11/include/**"
             ],
             "defines": [],
-            "macFrameworkPath": [
-                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
-            ],
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c11",
             "cppStandard": "c++17",

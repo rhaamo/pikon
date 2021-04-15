@@ -9,8 +9,8 @@
  * @param serialPort eg. /dev/ttyUSB0, COM2,...
  * @param baudrate  1200bps by default
  */
-NikonDatalink::NikonDatalink (const char *serialPort) {
-    serialPortName = serialPort;
+NikonDatalink::NikonDatalink (std::string serialPort) {
+    serialPortName = serialPort.c_str();
 }
 
 /**
@@ -62,6 +62,14 @@ int NikonDatalink::startSession () {
         goto ERROR;
     }
 
+    /*
+    Move switchBaudrate() to public in its own command
+    so we do
+    dl.StartSession()
+    dl.SwitchBaudrate()
+    dl.Whatever()
+    d.EndSession()
+
     if (switchBaudrate()) {
         log_info("Switched baudrate to 9600bps");
     } else {
@@ -70,6 +78,7 @@ int NikonDatalink::startSession () {
         sessionErr = err;
         goto ERROR;
     }
+    */
 
 ERROR:
     if (sessionErr) {

@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/pikon",
-            "args": ["-p", "/dev/tty.usbserial-00000000"],
+            "args": ["-p", "/dev/ttyUSB0"],
             "stopAtEntry": true,
             "cwd": "${workspaceFolder}",
             "environment": [],

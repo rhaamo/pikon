@@ -10,7 +10,7 @@ struct Options {
 
 void identify_camera(Options const &opt);
 void focus(Options const &opt);
-
+void fireShutter(Options const &opt);
 
 int main(int argc, char **argv) {
     CLI::App app("Pikon DataLink");
@@ -27,6 +27,10 @@ int main(int argc, char **argv) {
 
     CLI::App *cmdFocus = app.add_subcommand("focus", "trigger focus");
     cmdFocus->callback([opts]() { focus(*opts); });
+
+    CLI::App *cmdFireShutter = app.add_subcommand("fire_shutter", "fire shutter");
+    cmdFireShutter->callback([opts]() { fireShutter(*opts); });
+
 
     app.require_subcommand();
 
@@ -59,8 +63,25 @@ void focus(Options const &opt) {
 
     dl.startSession();
 
-    dl.switchBaudrate();
+    //dl.switchBaudrate();
     dl.focus();
+
+    dl.endSession();
+} 
+
+void fireShutter(Options const &opt) {
+    NikonDatalink dl(opt.serialPort);
+
+    if (opt.debug) {
+        dl.setLogLevel(LOG_DEBUG);
+    } else {
+        dl.setLogLevel(LOG_INFO);
+    }
+
+    dl.startSession();
+
+    //dl.switchBaudrate();
+    dl.fireShutter();
 
     dl.endSession();
 } 

@@ -33,6 +33,7 @@ class NikonDatalink {
         CameraType getCameraType();
         void setLogLevel(int);
         void focus();
+        void fireShutter();
         int getSessionError();
         bool switchBaudrate();
 

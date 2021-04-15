@@ -657,6 +657,12 @@ void NikonDatalink::focus() {
     sendCommand(kWriteDataMode, 0x0000FD39, &focus, 1);
 }
 
+// segfaults
+void NikonDatalink::fireShutter() {
+    log_info("Triggering shutter");
+    sendCommand(kShutterMode, 0, 0, 0);
+}
+
 /**
  * @brief Return the current session error
  * 

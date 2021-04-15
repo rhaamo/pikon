@@ -19,10 +19,11 @@ git submodule update
 ### Working
 
 - Nikon INQUIRY (camera identification)
+- Fire shutter (tested on N90s)
 
 ### Broken
 - Switch to 9600bps (don't work)
-- Sending focusing command (segfault, might be related to baud switch)
+- Sending focusing command (does nothing, sessionError)
 - Everything else
 
 ### TODO

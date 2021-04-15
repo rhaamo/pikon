@@ -5,11 +5,30 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "(gdb) Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/pikon",
+            "args": ["-p", "/dev/ttyUSB0", "fire_shutter"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
             "name": "(lldb) Launch",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/pikon",
-            "args": ["-p", "/dev/ttyUSB0"],
+            "args": ["-p", "/dev/ttyUSB0", "fire_shutter"],
             "stopAtEntry": true,
             "cwd": "${workspaceFolder}",
             "environment": [],

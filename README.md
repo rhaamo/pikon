@@ -15,6 +15,18 @@ git submodule init
 git submodule update
 ```
 
+## Build
+
+Using GCC:
+```
+make
+```
+
+Using Clang:
+```
+make CC=clang++ CXX=clang++
+```
+
 ## Features
 ### Working
 

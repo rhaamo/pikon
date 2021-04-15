@@ -26,4 +26,10 @@ $(TARGET): $(OBJS)
 clean:
 	$(RM) $(TARGET) $(OBJS) $(DEPS)
 
+cppcheck:
+	cppcheck -Iext/log.c/src -Iext/CLI11/include --std=c++11 src/
+
+cppcheckall:
+	cppcheck -Iext/log.c/src -Iext/CLI11/include --enable=all --std=c++11 src/
+
 -include $(DEPS)

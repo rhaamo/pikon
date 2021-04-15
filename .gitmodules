@@ -1,5 +1,5 @@
 [submodule "log.c"]
-	path = log.c
+	path = ext/log.c
 	url = https://github.com/rxi/log.c
 [submodule "ext/CLI11"]
 	path = ext/CLI11

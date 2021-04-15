@@ -413,7 +413,8 @@ int NikonDatalink::sendCommand(int mode, unsigned long address, void *buf, int s
         // (unsigned char *) buf += partial;
         // https://stackoverflow.com/a/23069563/465146
         // https://clang.llvm.org/compatibility.html#lvalue-cast
-        buf += partial;
+        //buf += partial;
+        buf = (void*) ((unsigned char*) buf + partial);
         address += partial;
     } while (size > 0);
 

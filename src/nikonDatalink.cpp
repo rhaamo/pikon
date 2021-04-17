@@ -175,11 +175,13 @@ int NikonDatalink::identifyCamera () {
         goto ERROR;
     }
 
+    usleep(200);
+
 RETRY_QUERY:
     done = false;
 
     log_info("Sending nikon inquiry string...");
-    err = writeData(kQueryString, kQueryStringSize);
+    err = writeDataSlow(kQueryString, kQueryStringSize);
     if (err != SP_OK) {
         log_error("%s", sp_last_error_message());
         goto ERROR;

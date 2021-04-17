@@ -32,11 +32,15 @@ make CC=clang++ CXX=clang++
 
 - Nikon INQUIRY (camera identification)
 - Fire shutter (tested on N90s)
+- Settings retrieval:
+  - Current frame number
 
 ### Broken
 - Switch to 9600bps (don't work)
 - Sending focusing command (does nothing, sessionError)
 - Everything else
+- Settings retrieval
+  - iso, focale, etc. everything returns 0 ???
 
 ### TODO
 - Focus, commands, etc. (might be N90s only, waiting to receive it for testing)

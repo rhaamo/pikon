@@ -344,6 +344,7 @@ int NikonDatalink::readData (void *buf, int size) {
 /**
  * @brief Switch to 9600 bps after camera identification has been done
  * 
+ * @return true if success, otherwise false
  */
 bool NikonDatalink::switchBaudrate() {
     if (!baudrateChange || cameraType == CameraType::unknown) {
@@ -625,6 +626,11 @@ ERROR:
     return err;
 }
 
+/**
+ * @brief Trigger camera focus
+ * 
+ * @return void 
+ */
 void NikonDatalink::focus() {
     log_info("Triggering focus");
     unsigned char focus = 0x08;
@@ -639,7 +645,11 @@ void NikonDatalink::focus() {
     sendCommand(kWriteDataMode, 0x0000FD39, &focus, 1);
 }
 
-// segfaults
+/**
+ * @brief Trigger the camera shutter (after focusing if not in manual)
+ * 
+ * @return void
+ */
 void NikonDatalink::fireShutter() {
     log_info("Triggering shutter");
     sendCommand(kShutterMode, 0, 0, 0);

@@ -670,7 +670,7 @@ CameraControlGlobals *NikonDatalink::getCameraSettings() {
 
     sCCG->valid = false;
 
-    sendCommand(kReadDataMode, 0x0000FD21, &(sCCG->locationFD21), 1);
+    sendCommand(kReadDataMode, 0x0000FD21, &(sCCG->locationFD21), 1); // frame count
 	sendCommand(kReadDataMode, 0x0000FD25, &(sCCG->locationFD25), 9);
 	sendCommand(kReadDataMode, 0x0000FD3A, &(sCCG->locationFD3A), 4);
 	sendCommand(kReadDataMode, 0x0000FD89, &(sCCG->locationFD89), 1);
@@ -678,7 +678,8 @@ CameraControlGlobals *NikonDatalink::getCameraSettings() {
 	sendCommand(kReadDataMode, 0x0000FE20, &(sCCG->locationFE20), 21);
 	sendCommand(kReadDataMode, 0x0000FE3A, &(sCCG->locationFE3A), 1);
 	sendCommand(kReadDataMode, 0x0000FE4F, &(sCCG->locationFE4F), 3);
-	sendCommand(kReadDataMode, 0x0000FD9D, &(sCCG->locationFD9D), 1);
+	sendCommand(kReadDataMode, 0x0000FD9D, &(sCCG->locationFD9D), 1); // ISO N90
+	sendCommand(kReadDataMode, 0x0000FD90, &(sCCG->locationFD90), 1); // ISO N90s
 
     if ((err = getSessionError()) != 0) goto ERROR;
 

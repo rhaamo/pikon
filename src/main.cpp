@@ -126,7 +126,7 @@ void getCameraSettings(Options const &opt) {
     if (cameraControls->locationFD21 == 0) {
         printf("No film present\r\n");
     } else {
-        printf("Film present: TODO\r\n");
+        printf("Film present, frame %i\r\n",  cameraControls->locationFD21 - 1);
     }
 
     if (dl.getCameraType() == CameraType::cameraN90s) {
@@ -137,7 +137,7 @@ void getCameraSettings(Options const &opt) {
         char *focalLength = GetStringTable(kFocalTable, cameraControls->locationFE2E);
         printf("Focale: %s\r\n", focalLength);
     } else if (dl.getCameraType() == CameraType::cameraN90) {
-        char *iso = GetStringTable(kISOTable, cameraControls->locationFD90);
+        char *iso = GetStringTable(kISOTable, cameraControls->locationFD9D);
         printf("ISO: %s\r\n", iso);
         lensInfos(cameraControls->locationFE32, cameraControls->locationFE2C,
 					cameraControls->locationFE2D, cameraControls->locationFE2E, cameraControls->locationFE2F);

@@ -396,11 +396,22 @@ int NikonDatalink::sendCommand(int mode, unsigned long address, void *buf, int s
         // https://stackoverflow.com/a/23069563/465146
         // https://clang.llvm.org/compatibility.html#lvalue-cast
         //buf += partial;
+        printf("1 buf: 0x%hhx, partial: 0x%hhx, address: 0x%X\r\n", buf, partial, address);
+        printf("buf: %i\r\n", buf);
+        // error: lvalue required as left operand of assignment
+        // (unsigned char *) buf += partial;
+        // should work
         buf = (void*) ((unsigned char*) buf + partial);
+        // illegal
+        // buf += partial;
+        printf("2 buf: 0x%hhx, partial: 0x%hhx, address: 0x%X\r\n", buf, partial, address);
         address += partial;
     } while (size > 0);
 
 ERROR:
+    if (err) {
+        log_error("sendCommand: error %s", err);
+    }
     return err;
 }
 
@@ -680,6 +691,11 @@ CameraControlGlobals *NikonDatalink::getCameraSettings() {
 	sendCommand(kReadDataMode, 0x0000FE4F, &(sCCG->locationFE4F), 3); // Flash Compensation
 	sendCommand(kReadDataMode, 0x0000FD9D, &(sCCG->locationFD9D), 1); // ISO Effective
 	sendCommand(kReadDataMode, 0x0000FD90, &(sCCG->locationFD90), 1); // ISO setting (125, 400, DX, etc.)
+
+    printf("eff: 0x%X\r\n", sCCG->locationFD9D);
+    printf("iso: 0x%X\r\n", sCCG->locationFD90);
+
+    printf("frame: %i, 0x%X\r\n", sCCG->locationFD21, sCCG->locationFD21);
 
     if ((err = getSessionError()) != 0) goto ERROR;
 

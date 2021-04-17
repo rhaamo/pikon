@@ -162,9 +162,9 @@ typedef struct CameraControlGlobals {
 	
 	unsigned char	locationFD8E;
 	unsigned char	locationFD8F;
-	unsigned char	locationFD90;
+	unsigned int	locationFD90;
 	
-	unsigned char	locationFD9D;
+	unsigned int	locationFD9D;
 	
 	unsigned char	locationFE20;
 	unsigned char	locationFE21;

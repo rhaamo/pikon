@@ -414,7 +414,7 @@ ERROR:
  * @return int 0 = ok, <0 = lol rip
  */
 int NikonDatalink::sendCommandLoop(int mode, unsigned long address, void *buf, int size) {
-    log_debug("Sending command loop, mode: 0x%hhx, address: %u, buffer: %s, size: %i", mode, address, buf, size);
+    log_debug("Sending command loop, mode: 0x%hhx, address: %X, buffer: %s, size: %i", mode, address, buf, size);
 
     if (sessionErr) {
         log_fatal("SessionError: %i", sessionErr);

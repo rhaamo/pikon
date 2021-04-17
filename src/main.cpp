@@ -130,7 +130,7 @@ void getCameraSettings(Options const &opt) {
     }
 
     if (dl.getCameraType() == CameraType::cameraN90s) {
-        char *iso = GetStringTable(kISOTable, cameraControls->locationFD90);
+        char *iso = GetStringTable(kISOTable, cameraControls->locationFD9D);
         printf("ISO: %s\r\n", iso);
         lensInfos(cameraControls->locationFE32, cameraControls->locationFE2C,
 					cameraControls->locationFE2D, cameraControls->locationFE2E, cameraControls->locationFE2F);

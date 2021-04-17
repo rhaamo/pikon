@@ -106,5 +106,24 @@ void getCameraSettings(Options const &opt) {
     CameraControlGlobals *cameraControls = NULL;
     cameraControls = dl.getCameraSettings();
 
+    if (cameraControls->locationFD21 == 0) {
+        printf("No film present\r\n");
+    } else {
+        printf("Film present: TODO\r\n");
+    }
+
+    if (dl.getCameraType() == CameraType::cameraN90s) {
+        // ISO locationFD90 getStringTable
+        // lens stuff
+        // focal table FE2E
+    } else if (dl.getCameraType() == CameraType::cameraN90) {
+        // ISO FD90
+        // lens stuff
+        // focale FE2B
+    }
+
+    // if (cameraControls->locationFE51 > NULL) max aperture etc.
+    
+
     dl.endSession();
 }

@@ -666,9 +666,9 @@ int NikonDatalink::getSessionError() {
 
 CameraControlGlobals *NikonDatalink::getCameraSettings() {
     int  err, endErr = 0;
-    CameraControlGlobals *sCCG;
+    CameraControlGlobals * sCCG = new CameraControlGlobals();
 
-    // sCCG->valid = false;
+    sCCG->valid = false;
 
     sendCommand(kReadDataMode, 0x0000FD21, &(sCCG->locationFD21), 1);
 	sendCommand(kReadDataMode, 0x0000FD25, &(sCCG->locationFD25), 9);
@@ -682,13 +682,13 @@ CameraControlGlobals *NikonDatalink::getCameraSettings() {
 
     if ((err = getSessionError()) != 0) goto ERROR;
 
-    // sCCG->valid = true;
+    sCCG->valid = true;
 
     return sCCG;
 
 ERROR:
     endErr = endSession();
-
+    log_error("we got a session error");
     if (err == 0) err = endErr;
 
     // log error somehow

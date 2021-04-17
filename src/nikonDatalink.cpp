@@ -665,12 +665,10 @@ int NikonDatalink::getSessionError() {
 }
 
 CameraControlGlobals *NikonDatalink::getCameraSettings() {
-    // should we do something like CameraFormInit of CameraControl.c
-
     int  err, endErr = 0;
     CameraControlGlobals *sCCG;
 
-    sCCG->valid = false;
+    // sCCG->valid = false;
 
     sendCommand(kReadDataMode, 0x0000FD21, &(sCCG->locationFD21), 1);
 	sendCommand(kReadDataMode, 0x0000FD25, &(sCCG->locationFD25), 9);
@@ -684,7 +682,7 @@ CameraControlGlobals *NikonDatalink::getCameraSettings() {
 
     if ((err = getSessionError()) != 0) goto ERROR;
 
-    sCCG->valid = true;
+    // sCCG->valid = true;
 
     return sCCG;
 

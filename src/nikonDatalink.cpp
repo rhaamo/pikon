@@ -671,13 +671,13 @@ CameraControlGlobals *NikonDatalink::getCameraSettings() {
     sCCG->valid = false;
 
     sendCommand(kReadDataMode, 0x0000FD21, &(sCCG->locationFD21), 1); // frame count
-	sendCommand(kReadDataMode, 0x0000FD25, &(sCCG->locationFD25), 9);
-	sendCommand(kReadDataMode, 0x0000FD3A, &(sCCG->locationFD3A), 4);
+	sendCommand(kReadDataMode, 0x0000FD25, &(sCCG->locationFD25), 9); // Shutter Speed Setting (Manal Mode)
+	sendCommand(kReadDataMode, 0x0000FD3A, &(sCCG->locationFD3A), 4); // Trap Focusing
 	sendCommand(kReadDataMode, 0x0000FD89, &(sCCG->locationFD89), 1);
 	sendCommand(kReadDataMode, 0x0000FD8E, &(sCCG->locationFD8E), 3);
-	sendCommand(kReadDataMode, 0x0000FE20, &(sCCG->locationFE20), 21);
+	sendCommand(kReadDataMode, 0x0000FE20, &(sCCG->locationFE20), 21); // Lens Flags
 	sendCommand(kReadDataMode, 0x0000FE3A, &(sCCG->locationFE3A), 1);
-	sendCommand(kReadDataMode, 0x0000FE4F, &(sCCG->locationFE4F), 3);
+	sendCommand(kReadDataMode, 0x0000FE4F, &(sCCG->locationFE4F), 3); // Flash Compensation
 	sendCommand(kReadDataMode, 0x0000FD9D, &(sCCG->locationFD9D), 1); // ISO Effective
 	sendCommand(kReadDataMode, 0x0000FD90, &(sCCG->locationFD90), 1); // ISO setting (125, 400, DX, etc.)
 

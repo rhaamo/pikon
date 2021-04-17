@@ -2,3 +2,6 @@
 /pikon
 **/*.o
 **/*.d
+/ws/
+/reports/
+/reports_html/

@@ -1,6 +1,8 @@
 [submodule "log.c"]
 	path = ext/log.c
 	url = https://github.com/rxi/log.c
+	ignore = untracked
 [submodule "ext/CLI11"]
 	path = ext/CLI11
 	url = https://github.com/CLIUtils/CLI11
+	ignore = untracked

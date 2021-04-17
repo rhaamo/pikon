@@ -90,6 +90,23 @@ void fireShutter(Options const &opt) {
     dl.endSession();
 } 
 
+void lensInfos(unsigned char lensId, unsigned char focalMin, unsigned char focalMax, unsigned char apMin, unsigned char apMax) {
+	char *focalMinStr, *focalMaxStr, *apMinStr, *apMaxStr;
+
+    std::string lensStr = std::to_string(lensId);
+    focalMinStr = GetStringTable(kFocalTable, focalMin);
+	focalMaxStr = GetStringTable(kFocalTable, focalMax);
+	apMinStr = GetStringTable(kCameraApertureTable, apMin);
+	apMaxStr = GetStringTable(kCameraApertureTable, apMax);
+
+    if (focalMin == focalMax) {
+        printf("Lens: %s - %s - %s\r\n", lensStr.c_str(), focalMinStr, apMinStr);
+    } else if (apMin == apMax) {
+        printf("Lens: %s - %s - %s - %s\r\n", lensStr.c_str(), focalMinStr, focalMaxStr, apMinStr);
+    } else {
+        printf("Lens: %s - %s - %s - %s - %s\r\n", lensStr.c_str(), focalMinStr, focalMaxStr, apMinStr, apMaxStr);
+    }
+ }
 void getCameraSettings(Options const &opt) {
     NikonDatalink dl(opt.serialPort);
 
@@ -113,12 +130,18 @@ void getCameraSettings(Options const &opt) {
     }
 
     if (dl.getCameraType() == CameraType::cameraN90s) {
+        char *iso = GetStringTable(kISOTable, cameraControls->locationFD90);
+        printf("ISO: %s\r\n", iso);
         // ISO locationFD90 getStringTable
-        // lens stuff
+        lensInfos(cameraControls->locationFE32, cameraControls->locationFE2C,
+					cameraControls->locationFE2D, cameraControls->locationFE2E, cameraControls->locationFE2F);
         // focal table FE2E
     } else if (dl.getCameraType() == CameraType::cameraN90) {
+        char *iso = GetStringTable(kISOTable, cameraControls->locationFD90);
+        printf("ISO: %s\r\n", iso);
         // ISO FD90
-        // lens stuff
+        lensInfos(cameraControls->locationFE32, cameraControls->locationFE2C,
+					cameraControls->locationFE2D, cameraControls->locationFE2E, cameraControls->locationFE2F);
         // focale FE2B
     }
 

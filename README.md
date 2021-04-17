@@ -42,6 +42,7 @@ make CC=clang++ CXX=clang++
 - Focus, commands, etc. (might be N90s only, waiting to receive it for testing)
 - Export of the 'exif-like' datas (the memo I think)
 - Setting various camera infos (exposure, ISO, etc.)
+- Library should return custom structs with raw and human values alongside
 
 ## Resources
 

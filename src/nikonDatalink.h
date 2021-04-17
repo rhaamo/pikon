@@ -8,6 +8,9 @@
 #include "log.h"
 #include "nikonPackets.h"
 #include "nikonErrors.h"
+#include "nikonStringTables.h"
+
+#define      kRollDigits     4
 
 #define kSerialBufSize	256
 #define kCameraNameBufSize	16

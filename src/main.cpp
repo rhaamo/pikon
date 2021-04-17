@@ -132,14 +132,12 @@ void getCameraSettings(Options const &opt) {
     if (dl.getCameraType() == CameraType::cameraN90s) {
         char *iso = GetStringTable(kISOTable, cameraControls->locationFD90);
         printf("ISO: %s\r\n", iso);
-        // ISO locationFD90 getStringTable
         lensInfos(cameraControls->locationFE32, cameraControls->locationFE2C,
 					cameraControls->locationFE2D, cameraControls->locationFE2E, cameraControls->locationFE2F);
         // focal table FE2E
     } else if (dl.getCameraType() == CameraType::cameraN90) {
         char *iso = GetStringTable(kISOTable, cameraControls->locationFD90);
         printf("ISO: %s\r\n", iso);
-        // ISO FD90
         lensInfos(cameraControls->locationFE32, cameraControls->locationFE2C,
 					cameraControls->locationFE2D, cameraControls->locationFE2E, cameraControls->locationFE2F);
         // focale FE2B

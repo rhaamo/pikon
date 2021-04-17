@@ -100,11 +100,11 @@ void lensInfos(unsigned char lensId, unsigned char focalMin, unsigned char focal
 	apMaxStr = GetStringTable(kCameraApertureTable, apMax);
 
     if (focalMin == focalMax) {
-        printf("Lens: %s - %s - %s\r\n", lensStr.c_str(), focalMinStr, apMinStr);
+        printf("Lens: id: %s - focal min: %s - ap min: %s\r\n", lensStr.c_str(), focalMinStr, apMinStr);
     } else if (apMin == apMax) {
-        printf("Lens: %s - %s - %s - %s\r\n", lensStr.c_str(), focalMinStr, focalMaxStr, apMinStr);
+        printf("Lens: id: %s - focal min: %s - focal max: %s - ap min: %s\r\n", lensStr.c_str(), focalMinStr, focalMaxStr, apMinStr);
     } else {
-        printf("Lens: %s - %s - %s - %s - %s\r\n", lensStr.c_str(), focalMinStr, focalMaxStr, apMinStr, apMaxStr);
+        printf("Lens: id: %s - focal min: %s - focal max: %s - ap min: %s - ap max: %s\r\n", lensStr.c_str(), focalMinStr, focalMaxStr, apMinStr, apMaxStr);
     }
  }
 void getCameraSettings(Options const &opt) {

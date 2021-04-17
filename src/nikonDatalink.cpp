@@ -218,6 +218,8 @@ RETRY_QUERY:
     } else {
         err = kWrongCameraErr;
     }
+    
+    sp_flush(serialPort, SP_BUF_BOTH);
 
 ERROR:
     sessionErr = err;
@@ -398,7 +400,7 @@ int NikonDatalink::sendCommand(int mode, unsigned long address, void *buf, int s
         // https://stackoverflow.com/a/23069563/465146
         // https://clang.llvm.org/compatibility.html#lvalue-cast
         //buf += partial;
-        printf("1 buf: 0x%hhx, partial: 0x%hhx, address: 0x%X\r\n", buf, partial, address);
+        printf("1 buf: 0x%hhx partial: 0x%hhx, address: 0x%X\r\n", buf, partial, address);
         printf("buf: %i\r\n", buf);
         // error: lvalue required as left operand of assignment
         // (unsigned char *) buf += partial;

@@ -1,6 +1,7 @@
 #include "nikonDatalink.h"
 
 #include <stdio.h>
+#include <unistd.h>
 #include <CLI/CLI.hpp>
 
 struct Options {
@@ -117,6 +118,10 @@ void getCameraSettings(Options const &opt) {
     }
 
     dl.startSession();
+
+    // sleep(3); // enabling this sleep breaks everything ???
+    sleep(1);
+    printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
     // should switch baudrate before getting infos
 

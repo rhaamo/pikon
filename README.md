@@ -36,6 +36,7 @@ make CC=clang++ CXX=clang++
   - Current frame number
 
 ### Broken
+- There is some serial/buffer/thing going on, in debugs, readData retrieve a 'N90/F90' way after the 'XXXXX', where the camera identification is already done
 - Switch to 9600bps (don't work)
 - Sending focusing command (does nothing, sessionError)
 - Everything else

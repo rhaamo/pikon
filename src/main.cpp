@@ -121,7 +121,7 @@ void getCameraSettings(Options const &opt) {
 
     // sleep(3); // enabling this sleep breaks everything ???
     sleep(1);
-    printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+    log_info("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
     // should switch baudrate before getting infos
 

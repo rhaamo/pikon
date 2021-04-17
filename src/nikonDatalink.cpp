@@ -340,7 +340,7 @@ int NikonDatalink::readData (void *buf, int size) {
         err = -1; // oopsie
     }
 
-    log_debug("readData: '%X', read: %i, expected: %i, err: %i", buf, readCount, size, err);
+    log_debug("readData: '%X' / '%s', read: %i, expected: %i, err: %i", buf, buf, readCount, size, err);
 
     return err;
 }

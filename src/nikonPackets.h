@@ -138,3 +138,59 @@ typedef struct {
         unsigned int    byteCount;
 } MemoHolderResponse;
 #define kMemoHolderResponseSize 4
+
+typedef struct CameraControlGlobals {
+	unsigned char	valid;
+	unsigned char	locationFD21;
+	
+	unsigned char	locationFD25;
+	unsigned char	locationFD26;
+	unsigned char	locationFD27;
+	unsigned char	locationFD28;
+	unsigned char	locationFD29;
+	unsigned char	locationFD2A;
+	unsigned char	locationFD2B;
+	unsigned char	locationFD2C;
+	unsigned char	locationFD2D;
+	
+	unsigned char	locationFD3A;
+	unsigned char	locationFD3B;
+	unsigned char	locationFD3C;
+	unsigned char	locationFD3D;
+	
+	unsigned char	locationFD89;
+	
+	unsigned char	locationFD8E;
+	unsigned char	locationFD8F;
+	unsigned char	locationFD90;
+	
+	unsigned char	locationFD9D;
+	
+	unsigned char	locationFE20;
+	unsigned char	locationFE21;
+	unsigned char	locationFE22;
+	unsigned char	locationFE23;
+	unsigned char	locationFE24;
+	unsigned char	locationFE25;
+	unsigned char	locationFE26;
+	unsigned char	locationFE27;
+	unsigned char	locationFE28;
+	unsigned char	locationFE29;
+	unsigned char	locationFE2A;
+	unsigned char	locationFE2B;
+	unsigned char	locationFE2C;
+	unsigned char	locationFE2D;
+	unsigned char	locationFE2E;
+	unsigned char	locationFE2F;
+	unsigned char	locationFE30;
+	unsigned char	locationFE31;
+	unsigned char	locationFE32;
+	unsigned char	locationFE33;
+	unsigned char	locationFE34;
+	
+	unsigned char	locationFE3A;
+	
+	unsigned char	locationFE4F;
+	unsigned char	locationFE50;
+	unsigned char	locationFE51;
+} CameraControlGlobals;

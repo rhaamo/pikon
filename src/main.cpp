@@ -11,6 +11,7 @@ struct Options {
 void identify_camera(Options const &opt);
 void focus(Options const &opt);
 void fireShutter(Options const &opt);
+void getCameraSettings(Options const &opt);
 
 int main(int argc, char **argv) {
     CLI::App app("Pikon DataLink");
@@ -30,6 +31,9 @@ int main(int argc, char **argv) {
 
     CLI::App *cmdFireShutter = app.add_subcommand("fire_shutter", "fire shutter");
     cmdFireShutter->callback([opts]() { fireShutter(*opts); });
+
+    CLI::App *cmdGetSettings = app.add_subcommand("get_settings", "get settings");
+    cmdGetSettings->callback([opts]() { getCameraSettings(*opts); });
 
 
     app.require_subcommand();
@@ -85,3 +89,22 @@ void fireShutter(Options const &opt) {
 
     dl.endSession();
 } 
+
+void getCameraSettings(Options const &opt) {
+    NikonDatalink dl(opt.serialPort);
+
+    if (opt.debug) {
+        dl.setLogLevel(LOG_DEBUG);
+    } else {
+        dl.setLogLevel(LOG_INFO);
+    }
+
+    dl.startSession();
+
+    // should switch baudrate before getting infos
+
+    CameraControlGlobals *cameraControls = NULL;
+    cameraControls = dl.getCameraSettings();
+
+    dl.endSession();
+}

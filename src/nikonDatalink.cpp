@@ -663,3 +663,38 @@ void NikonDatalink::fireShutter() {
 int NikonDatalink::getSessionError() {
     return sessionErr;
 }
+
+CameraControlGlobals *NikonDatalink::getCameraSettings() {
+    // should we do something like CameraFormInit of CameraControl.c
+
+    int  err, endErr = 0;
+    CameraControlGlobals *sCCG;
+
+    sCCG->valid = false;
+
+    sendCommand(kReadDataMode, 0x0000FD21, &(sCCG->locationFD21), 1);
+	sendCommand(kReadDataMode, 0x0000FD25, &(sCCG->locationFD25), 9);
+	sendCommand(kReadDataMode, 0x0000FD3A, &(sCCG->locationFD3A), 4);
+	sendCommand(kReadDataMode, 0x0000FD89, &(sCCG->locationFD89), 1);
+	sendCommand(kReadDataMode, 0x0000FD8E, &(sCCG->locationFD8E), 3);
+	sendCommand(kReadDataMode, 0x0000FE20, &(sCCG->locationFE20), 21);
+	sendCommand(kReadDataMode, 0x0000FE3A, &(sCCG->locationFE3A), 1);
+	sendCommand(kReadDataMode, 0x0000FE4F, &(sCCG->locationFE4F), 3);
+	sendCommand(kReadDataMode, 0x0000FD9D, &(sCCG->locationFD9D), 1);
+
+    if ((err = getSessionError()) != 0) goto ERROR;
+
+    sCCG->valid = true;
+
+    return sCCG;
+
+ERROR:
+    endErr = endSession();
+
+    if (err == 0) err = endErr;
+
+    // log error somehow
+
+    return NULL;
+
+}

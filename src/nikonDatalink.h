@@ -36,6 +36,7 @@ class NikonDatalink {
         void fireShutter();
         int getSessionError();
         bool switchBaudrate();
+        CameraControlGlobals *getCameraSettings();
 
         const char *serialPortName;
 

@@ -374,7 +374,7 @@ int NikonDatalink::sendCommand(int mode, unsigned long address, void *buf, int s
         return sessionErr;
     }
 
-    log_debug("Sending command, mode: 0x%hhx, address: %u, buffer: %s, size: %i", mode, address, buf, size);
+    log_debug("Sending command, mode: 0x%hhx, address: %X, buffer: %s, size: %i", mode, address, buf, size);
 
     int partial;
     int err = 0;

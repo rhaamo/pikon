@@ -134,13 +134,16 @@ void getCameraSettings(Options const &opt) {
         printf("ISO: %s\r\n", iso);
         lensInfos(cameraControls->locationFE32, cameraControls->locationFE2C,
 					cameraControls->locationFE2D, cameraControls->locationFE2E, cameraControls->locationFE2F);
-        // focal table FE2E
+        char *focalLength = GetStringTable(kFocalTable, cameraControls->locationFE2E);
+        printf("Focale: %s\r\n", focalLength);
     } else if (dl.getCameraType() == CameraType::cameraN90) {
         char *iso = GetStringTable(kISOTable, cameraControls->locationFD90);
         printf("ISO: %s\r\n", iso);
         lensInfos(cameraControls->locationFE32, cameraControls->locationFE2C,
 					cameraControls->locationFE2D, cameraControls->locationFE2E, cameraControls->locationFE2F);
-        // focale FE2B
+        char *focalLength = GetStringTable(kFocalTable, cameraControls->locationFE2B);
+        printf("Focale: %s\r\n", focalLength);
+
     }
 
     // if (cameraControls->locationFE51 > NULL) max aperture etc.

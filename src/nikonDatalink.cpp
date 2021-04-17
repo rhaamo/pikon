@@ -284,7 +284,7 @@ int NikonDatalink::writeData (const void *buf, int size) {
         return sessionErr;
     }
 
-    log_debug("writeData: '%s'", buf);
+    log_debug("writeData: '%X'", buf);
 
     sp_flush(serialPort, SP_BUF_INPUT);
 
@@ -336,7 +336,7 @@ int NikonDatalink::readData (void *buf, int size) {
         err = -1; // oopsie
     }
 
-    log_debug("readData: '%s', read: %i, expected: %i, err: %i", buf, readCount, size, err);
+    log_debug("readData: '%X', read: %i, expected: %i, err: %i", buf, readCount, size, err);
 
     return err;
 }

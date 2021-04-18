@@ -76,6 +76,16 @@ nikon@ubuntu-shared:~/pikon$ ./pikon fire_shutter
 nikon@ubuntu-shared:~/pikon$
 ```
 
+# Connecting to the cameras
+
+You don't need the Nikon DataLink cards, they were designed for old Sharp Organizers.
+
+The 10 pin connector exposes serial, 1200bps 8n1 with 9600bps negotiation possible.
+
+Pinout is here: http://www.avernus.com/~gadams/photography/nikon/datalink-protocol/MC31.pdf
+
+Front view from the camera, you need to wire pin 5 and pin 4 to TX/RX and pin 6 (or 7) to GND, directly to a FTDI and that's it. (no need for pin 3 ! RX/TX/GND are sufficient.)
+
 # Contact
 dashie (at) otter (dot) sh
 

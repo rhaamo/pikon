@@ -54,7 +54,6 @@ make CC=clang++ CXX=clang++
 See the folder `docs/`.
 - Text files about the DataLink protocol (packet format, etc.)
 - `N90 Buddy for Palm Souce` source code for a PalmOS 3.x app
-- `gicon-0.1.2` source code for a very old (gtk1-era) linux app, uses `tty` for serial comm
 
 ## Example
 

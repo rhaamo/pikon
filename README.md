@@ -31,15 +31,15 @@ make CC=clang++ CXX=clang++
 ### Working
 
 - Nikon INQUIRY (camera identification)
+- 9600bps switch (check is deactivated, but the switch works)
 - Fire shutter (tested on N90s)
 - Settings retrieval:
-  - Current frame number
+  - only the first setting (see broken)
 
 ### Broken
-- There is some serial/buffer/thing going on, in debugs, readData retrieve a 'N90/F90' way after the 'XXXXX', where the camera identification is already done
-- Switch to 9600bps (don't work)
 - Sending focusing command (does nothing, sessionError)
 - Everything else
+- sending multiple sendCommand (settings/status retrieval) only the first one works
 - Settings retrieval
   - iso, focale, etc. everything returns 0 ???
 

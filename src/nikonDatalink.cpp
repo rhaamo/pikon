@@ -323,6 +323,7 @@ int NikonDatalink::readData (void *buf, int size) {
     }
 
     if (size > kSerialBufSize) {
+        log_error("packet is too large for serial buffer");
         return kPacketTooLargeErr;
     }
 
@@ -622,6 +623,7 @@ int NikonDatalink::readDataPacket(unsigned char *buf, int size) {
 
     return err;
 ERROR:
+    log_debug("readDataPacket got err=%i", err);
     return err;
 }
 

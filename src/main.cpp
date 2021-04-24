@@ -118,6 +118,8 @@ void getCameraSettings(Options const &opt) {
     }
 
     dl.startSession();
+    dl.switchBaudrate();
+    usleep(200);
 
     // sleep(3); // enabling this sleep breaks everything ???
     sleep(1);

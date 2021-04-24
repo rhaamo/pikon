@@ -254,7 +254,10 @@ int NikonDatalink::writeDataSlow (const void *buf, int size) {
         return sessionErr;
     }
 
-    log_debug("writeDataSlow: '%s', size: %i", buf, size);
+    // log_debug("writeDataSlow: '%X', size: %i", buf, size);
+    char	output[800];
+    dataToHex((unsigned char *)buf, size, output, "     ");
+    log_debug("writeDataSlow: %s", output);
 
     sp_flush(serialPort, SP_BUF_INPUT);
 
@@ -288,7 +291,10 @@ int NikonDatalink::writeData (const void *buf, int size) {
         return sessionErr;
     }
 
-    log_debug("writeData: '%X'", buf);
+    // log_debug("writeData: '%X'", buf);
+    char	output[800];
+    dataToHex((unsigned char *)buf, size, output, "     ");
+    log_debug("writeData: %s", output);
 
     sp_flush(serialPort, SP_BUF_INPUT);
 
@@ -301,7 +307,6 @@ int NikonDatalink::writeData (const void *buf, int size) {
 
     return err;
 }
-
 
 /**
  * @brief Read datas from serial port
@@ -340,7 +345,10 @@ int NikonDatalink::readData (void *buf, int size) {
         err = -1; // oopsie
     }
 
-    log_debug("readData: '%X' / '%s', read: %i, expected: %i, err: %i", buf, buf, readCount, size, err);
+    // log_debug("readData: '%hhx' / '%s', read: %i, expected: %i, err: %i", buf, buf, readCount, size, err);
+    char	output[800];
+    dataToHex((unsigned char *)buf, size, output, "     ");
+    log_debug("readData: %s", output);
 
     return err;
 }

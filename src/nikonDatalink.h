@@ -9,6 +9,7 @@
 #include "nikonPackets.h"
 #include "nikonErrors.h"
 #include "nikonStringTables.h"
+#include "debug.h"
 
 #define      kRollDigits     4
 

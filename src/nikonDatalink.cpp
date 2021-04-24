@@ -263,9 +263,6 @@ int NikonDatalink::writeDataSlow (const void *buf, int size) {
 
     p = (char *)buf;
     for (i=0; i<size; i++) {
-        // delay, whatever, 200ms
-        // original PalmOS port was using a SysTaskDelay(1)
-        usleep(200);
         sp_blocking_write(serialPort, p, 1, 0);
         sp_return err = sp_drain(serialPort);
         if (err != SP_OK) {

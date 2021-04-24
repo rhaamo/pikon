@@ -339,7 +339,7 @@ int NikonDatalink::readData (void *buf, int size) {
         }
         log_debug("Error reading datas: %s", sp_last_error_message());
     } else if (readCount == size) {
-        log_info("asked to write %i, wrote %i", size, readCount);
+        log_debug("asked to write %i, wrote %i", size, readCount);
         err = 0; // it's ok
     } else {
         log_error("asked to write %i, wrote %i", size, readCount);

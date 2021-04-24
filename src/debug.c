@@ -2,7 +2,7 @@
 
 
 // From Debug.c of N90 Buddy for Palm
-void dataToHex(unsigned char *input, int count, char *output, char *prefix) {
+void dataToHex(unsigned char *input, int count, char *output, const char *prefix) {
 	unsigned char	byte;
 	unsigned char nibble;
 	int	wrap = 1;

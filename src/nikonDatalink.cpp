@@ -332,18 +332,18 @@ int NikonDatalink::readData (void *buf, int size) {
         if ((readCount > 0) && (readCount != size)) {
             err = kPacketSizeErr;
             sp_flush(serialPort, SP_BUF_INPUT);
-            log_error("if rC>0 && rC!=size; asked to write %i, wrote %i", size, readCount);
+            log_error("if rC>0 && rC!=size; asked to read %i, read %i", size, readCount);
         } else {
-            log_error("else rC>0 && rC!=size; asked to write %i, wrote %i", size, readCount);
+            log_error("else rC>0 && rC!=size; asked to read %i, read %i", size, readCount);
             sp_flush(serialPort, SP_BUF_INPUT);
             err = readCount;
         }
         log_debug("Error reading datas: %s", sp_last_error_message());
     } else if (readCount == size) {
-        log_debug("asked to write %i, wrote %i", size, readCount);
+        log_debug("asked to read %i, read %i", size, readCount);
         err = 0; // it's ok
     } else {
-        log_error("asked to write %i, wrote %i", size, readCount);
+        log_error("asked to read %i, read %i", size, readCount);
         err = -1; // oopsie
     }
 

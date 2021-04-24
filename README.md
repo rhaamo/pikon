@@ -90,7 +90,7 @@ dashie (at) otter (dot) sh
 
 # Copyright
 
-Everything under docs/ are under their own (GPL2 for gicon, non-specified for the rest) and out of the scope of the utils.
+Everything under docs/ are under their own and out of the scope of the utils.
 
 Everything under ext/ are external libraries not packaged that we uses.
 

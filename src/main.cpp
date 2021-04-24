@@ -121,6 +121,12 @@ void getCameraSettings(Options const &opt) {
 
     dl.switchBaudrate();
 
+    if (dl.getCameraType() == CameraType::cameraN90s) {
+        printf("Camera type: F90x/N90s\r\n");
+    } else {
+        printf("Camera type: F90/N90\r\n");
+    }
+
     CameraControlGlobals *cameraControls = NULL;
     cameraControls = dl.getCameraSettings();
 

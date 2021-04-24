@@ -107,7 +107,8 @@ void lensInfos(unsigned char lensId, unsigned char focalMin, unsigned char focal
     } else {
         printf("Lens: id: %s - focal min: %s - focal max: %s - ap min: %s - ap max: %s\r\n", lensStr.c_str(), focalMinStr, focalMaxStr, apMinStr, apMaxStr);
     }
- }
+}
+
 void getCameraSettings(Options const &opt) {
     NikonDatalink dl(opt.serialPort);
 

@@ -331,14 +331,18 @@ int NikonDatalink::readData (void *buf, int size) {
         if ((readCount > 0) && (readCount != size)) {
             err = kPacketSizeErr;
             sp_flush(serialPort, SP_BUF_INPUT);
+            log_error("if rC>0 && rC!=size; asked to write %i, wrote %i", size, readCount);
         } else {
+            log_error("else rC>0 && rC!=size; asked to write %i, wrote %i", size, readCount);
             sp_flush(serialPort, SP_BUF_INPUT);
             err = readCount;
         }
-        log_debug("Error re\ading datas: %s", sp_last_error_message());
+        log_debug("Error reading datas: %s", sp_last_error_message());
     } else if (readCount == size) {
+        log_info("asked to write %i, wrote %i", size, readCount);
         err = 0; // it's ok
     } else {
+        log_error("asked to write %i, wrote %i", size, readCount);
         err = -1; // oopsie
     }
 
@@ -405,15 +409,12 @@ int NikonDatalink::sendCommand(int mode, unsigned long address, void *buf, int s
         // https://stackoverflow.com/a/23069563/465146
         // https://clang.llvm.org/compatibility.html#lvalue-cast
         //buf += partial;
-        printf("1 buf: 0x%hhx partial: 0x%hhx, address: 0x%X\r\n", buf, partial, address);
-        printf("buf: %i\r\n", buf);
         // error: lvalue required as left operand of assignment
         // (unsigned char *) buf += partial;
         // should work
         buf = (void*) ((unsigned char*) buf + partial);
         // illegal
         // buf += partial;
-        printf("2 buf: 0x%hhx, partial: 0x%hhx, address: 0x%X\r\n", buf, partial, address);
         address += partial;
     } while (size > 0);
 
@@ -518,11 +519,13 @@ COMMAND_RETRY:
     }
 
     if (err && (retry == false)) {
+        log_error("retry because err: %i", err);
         retry = true;
         goto COMMAND_RETRY;
     }
 
     if (err) {
+        log_error("got err=%i", err);
         sessionErr = err;
         goto ERROR;
     }
@@ -638,11 +641,16 @@ int NikonDatalink::readStatusPacket() {
         goto ERROR;
     }
 
-    if (ep.status != kStatusOK) {
-        err = kPacketResponseErr;
-    }
+    log_debug("readStatusPacket, readData err, before ep.status = %i", err);
+
+    // FIXME !!!
+    // readData retrieve \x06 \x00 but condition fails !
+    // if (ep.status != kStatusOK) {
+        // err = kPacketResponseErr;
+    // }
 
 ERROR:
+    log_debug("readStatusPacket, readData err = %i", err);
     return err;
 }
 

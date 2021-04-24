@@ -709,11 +709,6 @@ CameraControlGlobals *NikonDatalink::getCameraSettings() {
 	sendCommand(kReadDataMode, 0x0000FD9D, &(sCCG->locationFD9D), 1); // ISO Effective
 	sendCommand(kReadDataMode, 0x0000FD90, &(sCCG->locationFD90), 1); // ISO setting (125, 400, DX, etc.)
 
-    printf("eff: 0x%X\r\n", sCCG->locationFD9D);
-    printf("iso: 0x%X\r\n", sCCG->locationFD90);
-
-    printf("frame: %i, 0x%X\r\n", sCCG->locationFD21, sCCG->locationFD21);
-
     if ((err = getSessionError()) != 0) goto ERROR;
 
     sCCG->valid = true;

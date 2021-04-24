@@ -118,14 +118,8 @@ void getCameraSettings(Options const &opt) {
     }
 
     dl.startSession();
+
     dl.switchBaudrate();
-    usleep(200);
-
-    // sleep(3); // enabling this sleep breaks everything ???
-    sleep(1);
-    log_info("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-
-    // should switch baudrate before getting infos
 
     CameraControlGlobals *cameraControls = NULL;
     cameraControls = dl.getCameraSettings();

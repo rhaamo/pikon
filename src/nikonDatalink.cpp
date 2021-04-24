@@ -52,9 +52,9 @@ int NikonDatalink::startSession () {
     }
 
     if (getCameraType() == cameraN90) {
-        log_info("Camera is a N90/F90");
+        log_info("Camera is a F90/N90");
     } else if (getCameraType() == cameraN90s) {
-        log_info("Camera is a N90s/F90x");
+        log_info("Camera is a F90x/N90s");
     } else {
         log_error("Camera is unknown");
         err = -1;

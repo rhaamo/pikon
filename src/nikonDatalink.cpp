@@ -700,6 +700,13 @@ CameraControlGlobals *NikonDatalink::getCameraSettings() {
 
     sCCG->valid = false;
 
+    // there is intermediaries not filled with sendCommand, that are used in the various prints
+    // the 'size' might be used to overflow on adjacent locations in the struct ?
+    // like asking FE20 with size 21 would also fills
+    // FE32 (lens apperture range hi) / FE2C (focus distance)
+    // FE2D (?) // FE2E (zoom position)
+    // etc.
+
     sendCommand(kReadDataMode, 0x0000FD21, &(sCCG->locationFD21), 1); // frame count
 	sendCommand(kReadDataMode, 0x0000FD25, &(sCCG->locationFD25), 9); // Shutter Speed Setting (Manal Mode)
 	sendCommand(kReadDataMode, 0x0000FD3A, &(sCCG->locationFD3A), 4); // Trap Focusing

@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#define SLEEP 200
+
 /**
  * @brief Construct a new Nikon Datalink:: Nikon Datalink object
  * 
@@ -101,7 +103,7 @@ RETRY_SIGNOFF:
     sp_flush(serialPort, SP_BUF_INPUT);
     serialClose();
 
-    usleep(200);
+    usleep(SLEEP);
 
     // Assumes it's good
     sessionErr = 0; // and reset the session
@@ -175,7 +177,7 @@ int NikonDatalink::identifyCamera () {
         goto ERROR;
     }
 
-    usleep(200);
+    usleep(SLEEP);
 
 RETRY_QUERY:
     done = false;
@@ -222,6 +224,7 @@ RETRY_QUERY:
     sp_flush(serialPort, SP_BUF_BOTH);
 
 ERROR:
+    log_debug("camera identification: err=%i", err);
     sessionErr = err;
     return err;
 }
@@ -266,7 +269,7 @@ int NikonDatalink::writeDataSlow (const void *buf, int size) {
         sp_blocking_write(serialPort, p, 1, 0);
         sp_return err = sp_drain(serialPort);
         if (err != SP_OK) {
-            log_error("Cannot write one byte: %s", sp_last_error_message());
+            log_error("Cannot write one byte: %s, err=%i", sp_last_error_message(), err);
             sessionErr = err;
             return err;
         }
@@ -298,7 +301,7 @@ int NikonDatalink::writeData (const void *buf, int size) {
     sp_blocking_write(serialPort, buf, size, 0);
     sp_return err = sp_drain(serialPort);
     if (err != SP_OK) {
-        log_error("Cannot write buffer: %s", sp_last_error_message());
+        log_error("Cannot write buffer: %s, err=%i", sp_last_error_message(), err);
         sessionErr = err;
     }
 
@@ -367,6 +370,7 @@ bool NikonDatalink::switchBaudrate() {
     }
     log_info("Switching baudrate...");
     if (sendCommand(kBaudChangeMode, 0, 0, 0)) {
+        log_debug("baudrate switch ok");
         return true;
     }
 
@@ -496,6 +500,7 @@ COMMAND_RETRY:
     }
 
     if (err) {
+        log_error("sendCommandLoop got err=%i", err);
         goto ERROR;
     }
 
@@ -520,13 +525,13 @@ COMMAND_RETRY:
     }
 
     if (err && (retry == false)) {
-        log_error("retry because err: %i", err);
+        log_error("sendCommandLoop retry because err: %i", err);
         retry = true;
         goto COMMAND_RETRY;
     }
 
     if (err) {
-        log_error("got err=%i", err);
+        log_error("sendCommandLoop got err=%i", err);
         sessionErr = err;
         goto ERROR;
     }
@@ -538,7 +543,7 @@ COMMAND_RETRY:
             sessionErr = err;
             goto ERROR;
         }
-        usleep(200);
+        usleep(SLEEP);
         log_info("Serial port is now configured for 9600bps");
     }
 
@@ -597,11 +602,13 @@ int NikonDatalink::readDataPacket(unsigned char *buf, int size) {
 
     err = readData(serialBuffer, size + kDataPacketStartSize + kDataPacketStopSize);
     if (err) {
+        log_debug("readDataPacket:readData err=%i", err);
         goto ERROR;
     }
 
     p = serialBuffer;
     if (((DataPacketStart *) p)->startMark != kDataPacketStartMark) {
+        log_debug("readDataPacket p->startMark != kDataPacketStartMark err=%i", err);
         goto ERROR;
     }
     p += kDataPacketStartSize;
@@ -612,9 +619,13 @@ int NikonDatalink::readDataPacket(unsigned char *buf, int size) {
         *buf++ = *p++;
     }
     if (((DataPacketStop *) p)->checkByte != cs) {
+        // This error is sometimes triggered, why
         err = kPacketCSErr;
+        log_debug("readDataPacket p->checkByte != cs err=%i", err);
     } else if (((DataPacketStop *) p)->stopMark != kDataPacketStopMark) {
+        // This one seems to trigger frequently
         err = kPacketSizeErr;
+        log_debug("readDataPacket p->stopMark != kDataPacketStopMark err=%i", err);
     }
 
     if (err) {
@@ -708,6 +719,14 @@ CameraControlGlobals *NikonDatalink::getCameraSettings() {
     // etc.
 
     sendCommand(kReadDataMode, 0x0000FD21, &(sCCG->locationFD21), 1); // frame count
+    // reissuing a startSession between calls "fix" the bad retrieval issue
+    // might be a timing issue somewhere
+    // or the startSession clears something somewhere that needs to be done or whatever
+    // it does works only for the next sendCommand
+    // using a startSession between each ends up in segfault
+    // startSession();
+	sendCommand(kReadDataMode, 0x0000FD9D, &(sCCG->locationFD9D), 1); // ISO Effective
+	sendCommand(kReadDataMode, 0x0000FD9D, &(sCCG->locationFD9D), 1); // ISO Effective
 	sendCommand(kReadDataMode, 0x0000FD25, &(sCCG->locationFD25), 9); // Shutter Speed Setting (Manal Mode)
 	sendCommand(kReadDataMode, 0x0000FD3A, &(sCCG->locationFD3A), 4); // Trap Focusing
 	sendCommand(kReadDataMode, 0x0000FD89, &(sCCG->locationFD89), 1);
@@ -715,7 +734,6 @@ CameraControlGlobals *NikonDatalink::getCameraSettings() {
 	sendCommand(kReadDataMode, 0x0000FE20, &(sCCG->locationFE20), 21); // Lens Flags
 	sendCommand(kReadDataMode, 0x0000FE3A, &(sCCG->locationFE3A), 1);
 	sendCommand(kReadDataMode, 0x0000FE4F, &(sCCG->locationFE4F), 3); // Flash Compensation
-	sendCommand(kReadDataMode, 0x0000FD9D, &(sCCG->locationFD9D), 1); // ISO Effective
 	//sendCommand(kReadDataMode, 0x0000FD90, &(sCCG->locationFD90), 1); // ISO setting (125, 400, DX, etc.)
 
     if ((err = getSessionError()) != 0) goto ERROR;

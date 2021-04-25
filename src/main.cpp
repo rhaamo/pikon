@@ -122,6 +122,8 @@ void getCameraSettings(Options const &opt) {
 
     dl.switchBaudrate();
 
+    // From CameraControl.c:CameraUpdateInfo()
+
     if (dl.getCameraType() == CameraType::cameraN90s) {
         printf("Camera type: F90x/N90s\r\n");
     } else {
@@ -154,8 +156,33 @@ void getCameraSettings(Options const &opt) {
 
     }
 
-    // if (cameraControls->locationFE51 > NULL) max aperture etc.
+    char *shutterSpeed = GetStringTable(kShutterSpeedTable, cameraControls->locationFE50);
+    printf("Shutter speed: %s\r\n", shutterSpeed);
+
+    if (cameraControls->locationFE51 > GetStringTableMax(kApertureTable)) {
+        printf("Aperture: f/EE\r\n");
+    } else {
+        char *aperture = GetStringTable(kApertureTable, cameraControls->locationFE51);
+        printf("Aperture: %s\r\n", aperture);
+    }
+
+    // FD26 / kVariProgramStartIndex..
+    // FD28 / metering
+    // FD2B / focus
+    // FD29 / motor drive
+
+    if (dl.getCameraType() == CameraType::cameraN90s) {
+        char *expComp = GetStringTable(kCameraExpCompTable, cameraControls->locationFD2D);
+        char *expTable = GetStringTable(kExpCompTable, ((cameraControls->locationFD8F - 0x5A) - (cameraControls->locationFD90 *2 )));
+        printf("Exposure: %s / %s\r\n", expComp, expTable);
+    } else {
+        char *expComp = GetStringTable(kCameraExpCompTable, cameraControls->locationFD2D);
+        printf("Exposure: %s\r\n", expComp);
+    }
     
+    // multiple exposure, etc.
+    // flash
+
 
     dl.endSession();
 }

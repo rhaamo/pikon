@@ -709,7 +709,7 @@ CameraControlGlobals *NikonDatalink::getCameraSettings() {
 	sendCommand(kReadDataMode, 0x0000FE3A, &(sCCG->locationFE3A), 1);
 	sendCommand(kReadDataMode, 0x0000FE4F, &(sCCG->locationFE4F), 3); // Flash Compensation
 	sendCommand(kReadDataMode, 0x0000FD9D, &(sCCG->locationFD9D), 1); // ISO Effective
-	sendCommand(kReadDataMode, 0x0000FD90, &(sCCG->locationFD90), 1); // ISO setting (125, 400, DX, etc.)
+	//sendCommand(kReadDataMode, 0x0000FD90, &(sCCG->locationFD90), 1); // ISO setting (125, 400, DX, etc.)
 
     if ((err = getSessionError()) != 0) goto ERROR;
 
